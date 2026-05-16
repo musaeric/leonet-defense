@@ -150,6 +150,59 @@ function usePulse(interval=1000) {
   return tick;
 }
 
+// ── DevTools Guard ─────────────────────────────────────────────────────────────
+// Detects browser inspect panel open → nullifies all sensitive field values.
+function useDevToolsGuard() {
+  const [devOpen, setDevOpen] = useState(false);
+  const ref = useRef(false);
+
+  useEffect(() => {
+    // Suppress console to block accidental data logging
+    const noop = () => {};
+    const orig = {
+      log:   console.log.bind(console),
+      table: console.table.bind(console),
+      dir:   console.dir.bind(console),
+      debug: console.debug.bind(console),
+      group: console.group.bind(console),
+    };
+    console.log = console.table = console.dir = console.debug = console.group = noop;
+
+    const detect = () => {
+      const h = window.outerHeight - window.innerHeight > 150;
+      const w = window.outerWidth  - window.innerWidth  > 150;
+      const detected = h || w;
+      if (detected !== ref.current) {
+        ref.current = detected;
+        setDevOpen(detected);
+        if (detected) {
+          console.clear();
+          orig.log(
+            '%c⛔  LeoNet Defense — Unauthorized inspection detected. All sensitive data has been nullified.',
+            'color:#FF2D55;font-size:14px;font-weight:900;padding:12px 16px;background:#050A14;border-left:4px solid #FF2D55'
+          );
+        }
+      }
+    };
+
+    // Disable right-click context menu
+    const noCtx = (e) => e.preventDefault();
+    document.addEventListener('contextmenu', noCtx);
+
+    const id = setInterval(detect, 350);
+    detect();
+    return () => {
+      clearInterval(id);
+      document.removeEventListener('contextmenu', noCtx);
+      Object.assign(console, orig);
+    };
+  }, []);
+
+  // Returns 'null' string when DevTools open, otherwise the real value
+  const mask = useCallback((val) => devOpen ? 'null' : val, [devOpen]);
+  return { devOpen, mask };
+}
+
 // ── Glow Border ──────────────────────────────────────────────────────────────
 const GlowCard = ({ children, color=D.cyan, style={}, onClick }) => (
   <div onClick={onClick} style={{
@@ -849,6 +902,7 @@ export default function App() {
   const [engType, setEngType]         = useState('Penetration Test');
   const [reportDate, setReportDate]   = useState('2026-05-16');
   const [scope, setScope]             = useState('');
+  const { devOpen, mask }             = useDevToolsGuard();
   const tick = usePulse(800);
 
   const totalThreats   = threats.filter(t => !t.squashed).length;
@@ -2282,13 +2336,13 @@ export default function App() {
                     <GlowCard key={a.agentId} color={a.online?D.green:D.muted} onClick={()=>setSelAgent(a)}
                       style={{ padding:18, marginBottom:10, cursor:'pointer', border:`1px solid ${selectedAgent?.agentId===a.agentId?D.cyan:a.online?D.green+'44':D.border}` }}>
                       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
-                        <div style={{ fontSize:13, fontWeight:800, color:D.white }}>{a.agentName||a.agentId}</div>
+                        <div style={{ fontSize:13, fontWeight:800, color:D.white }}>{mask(a.agentName||a.agentId)}</div>
                         <div style={{ display:'flex', alignItems:'center', gap:5 }}>
                           <div style={{ width:7, height:7, borderRadius:'50%', background: a.online?D.green:D.muted, animation: a.online?'pulse-glow 2s infinite':'none' }} />
                           <span style={{ fontSize:9, fontWeight:800, color: a.online?D.green:D.muted }}>{a.online?'ONLINE':'OFFLINE'}</span>
                         </div>
                       </div>
-                      <div style={{ fontSize:10, color:D.muted, fontFamily:'monospace', marginBottom:6 }}>{a.hostname} · {a.platform}</div>
+                      <div style={{ fontSize:10, color:D.muted, fontFamily:'monospace', marginBottom:6 }}>{mask(a.hostname)} · {a.platform}</div>
                       <div style={{ display:'flex', gap:8 }}>
                         <span style={{ fontSize:9, fontWeight:800, color:D.red, background:'rgba(255,45,85,0.12)', border:`1px solid ${D.red}33`, borderRadius:8, padding:'2px 8px' }}>{a.criticalCount||0} critical</span>
                         <span style={{ fontSize:9, fontWeight:800, color:D.orange, background:'rgba(255,107,53,0.12)', border:`1px solid ${D.orange}33`, borderRadius:8, padding:'2px 8px' }}>{a.threatCount||0} threats</span>
@@ -2304,8 +2358,8 @@ export default function App() {
                     <GlowCard color={D.cyan} style={{ padding:24, marginBottom:16 }}>
                       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
                         <div>
-                          <div style={{ fontSize:16, fontWeight:900, color:D.white }}>{agent.agentName||agent.agentId}</div>
-                          <div style={{ fontSize:11, color:D.muted, marginTop:2 }}>{agent.hostname} · {agent.platform} · {agent.agentId}</div>
+                          <div style={{ fontSize:16, fontWeight:900, color:D.white }}>{mask(agent.agentName||agent.agentId)}</div>
+                          <div style={{ fontSize:11, color:D.muted, marginTop:2 }}>{mask(agent.hostname)} · {agent.platform} · {mask(agent.agentId)}</div>
                         </div>
                         <button onClick={()=>setSelAgent(null)} style={{ background:'none', border:`1px solid ${D.border}`, borderRadius:6, color:D.muted, padding:'5px 10px', cursor:'pointer', fontSize:11 }}>✕ Close</button>
                       </div>
@@ -2351,7 +2405,7 @@ export default function App() {
 
                     {/* Threats on this agent */}
                     <GlowCard color={D.red} style={{ padding:24, marginBottom:16 }}>
-                      <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:14 }}>🎯 Threats on {agent.agentName} ({(agent.threats||[]).length})</div>
+                      <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:14 }}>🎯 Threats on {mask(agent.agentName)} ({(agent.threats||[]).length})</div>
                       {(agent.threats||[]).length === 0
                         ? <div style={{ color:D.green, fontSize:12 }}>✅ No active threats on this device</div>
                         : (agent.threats||[]).map(t => (
@@ -2360,12 +2414,12 @@ export default function App() {
                               <span style={{ fontSize:11, fontWeight:700, color:sevColor(t.severity) }}>{t.type}</span>
                               <span style={{ fontSize:9, fontWeight:800, color:sevColor(t.severity), textTransform:'uppercase' }}>{t.severity}</span>
                             </div>
-                            <div style={{ fontSize:11, color:D.text, marginBottom:4 }}>{t.name}</div>
-                            <div style={{ fontSize:9, color:D.muted, marginBottom:8 }}>{t.details}</div>
+                            <div style={{ fontSize:11, color:D.text, marginBottom:4 }}>{mask(t.name)}</div>
+                            <div style={{ fontSize:9, color:D.muted, marginBottom:8 }}>{mask(t.details)}</div>
                             {t.action && (
                               <button onClick={() => sendCmd(agent.agentId, t.action.action, { pid:t.action.pid, ip:t.action.ip, label:t.action.label })}
                                 style={{ padding:'6px 14px', borderRadius:6, border:'none', background:sevColor(t.severity), color:'#fff', fontWeight:800, fontSize:10, cursor:'pointer' }}>
-                                ⚡ {t.action.label}
+                                ⚡ {mask(t.action.label)}
                               </button>
                             )}
                           </div>
@@ -2382,7 +2436,7 @@ export default function App() {
                             <span>{m.success?'✅':'⚠️'}</span>
                             <div>
                               <div style={{ fontSize:10, fontWeight:700, color:m.success?D.green:D.orange }}>{(m.action||'').replace(/_/g,' ').toUpperCase()}</div>
-                              <div style={{ fontSize:10, color:D.text, marginTop:2 }}>{m.output}</div>
+                              <div style={{ fontSize:10, color:D.text, marginTop:2 }}>{mask(m.output)}</div>
                               <div style={{ fontSize:9, color:D.muted, marginTop:2 }}>{m.executedAt ? new Date(m.executedAt).toLocaleString() : ''}</div>
                             </div>
                           </div>
@@ -2785,6 +2839,13 @@ CONFIDENTIAL — This document contains sensitive security information. Distribu
 
   return (
     <div style={{ display:'flex', flexDirection:'column', minHeight:'100vh', background:D.bg }}>
+      {devOpen && (
+        <div style={{ position:'fixed', top:0, left:0, right:0, zIndex:99999, background:'#FF2D55', color:'#fff', padding:'10px 20px', display:'flex', alignItems:'center', gap:12, fontSize:12, fontWeight:800, letterSpacing:0.5 }}>
+          <span style={{ fontSize:16 }}>⛔</span>
+          SECURITY ALERT — Browser inspection panel detected. All sensitive data has been nullified for protection.
+          <span style={{ marginLeft:'auto', fontSize:11, opacity:0.8 }}>Close DevTools to restore view.</span>
+        </div>
+      )}
       <Toast />
       <Sidebar />
       <TopBar />
