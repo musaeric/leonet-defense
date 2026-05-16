@@ -952,7 +952,7 @@ export default function App() {
       <div style={{ display:'flex', alignItems:'center', gap:14 }}>
         <button onClick={()=>setSidebarOpen(p=>!p)} style={{ background:'none', border:'none', color:D.cyan, cursor:'pointer', fontSize:18, display:'flex', alignItems:'center', padding:4 }}>☰</button>
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-          <div style={{ width:32, height:32, borderRadius:8, background:`linear-gradient(135deg,${D.blue},${D.cyan})`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:16, boxShadow:`0 0 14px ${D.cyan}55` }}>🦁</div>
+          <img src="/logo.jpg" alt="LeoNet Defense" style={{ width:32, height:32, borderRadius:8, objectFit:'cover', boxShadow:`0 0 14px ${D.cyan}55` }} />
           <div>
             <div style={{ fontWeight:900, fontSize:14, color:D.white, letterSpacing:0.5 }}>LeoNet Defense</div>
             <div style={{ fontSize:10, color:D.cyan, letterSpacing:1 }}>QUANTUM SECURITY PLATFORM</div>
@@ -983,7 +983,7 @@ export default function App() {
       <div style={{ position:'fixed', top:0, left:0, bottom:0, width:220, background:D.surface, borderRight:`1px solid ${D.border}`, zIndex:300, transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)', transition:'transform 0.25s cubic-bezier(0.4,0,0.2,1)', display:'flex', flexDirection:'column', padding:'16px 0' }}>
         <div style={{ padding:'10px 20px 20px', borderBottom:`1px solid ${D.border}`, marginBottom:8 }}>
           <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-            <div style={{ width:36, height:36, borderRadius:8, background:`linear-gradient(135deg,${D.blue},${D.cyan})`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, boxShadow:`0 0 16px ${D.cyan}55` }}>🦁</div>
+            <img src="/logo.jpg" alt="LeoNet Defense" style={{ width:36, height:36, borderRadius:8, objectFit:'cover', boxShadow:`0 0 16px ${D.cyan}55` }} />
             <div><div style={{ fontWeight:900, color:D.white, fontSize:13 }}>LeoNet Defense</div><div style={{ fontSize:9, color:D.cyan, letterSpacing:1 }}>v4.7.0 · QUANTUM CORE</div></div>
           </div>
         </div>
