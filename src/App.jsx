@@ -427,15 +427,20 @@ function ComplianceBadge({ name, status, icon }) {
 
 // ── Main App ─────────────────────────────────────────────────────────────────
 const NAV = [
-  { id:'dashboard',    label:'Dashboard',        icon:'⚡' },
-  { id:'threat-matrix',label:'Threat Matrix',    icon:'🎯' },
-  { id:'scan',         label:'Deep Scan',        icon:'🔬' },
-  { id:'network',      label:'Network Shield',   icon:'🌐' },
-  { id:'memory',       label:'Memory Lab',       icon:'🧠' },
-  { id:'intel',        label:'Intel Feed',       icon:'📡' },
-  { id:'compliance',   label:'Compliance',       icon:'🛡️' },
-  { id:'training',     label:'Training',         icon:'🎮' },
-  { id:'settings',     label:'Settings',         icon:'⚙️' },
+  { id:'dashboard',      label:'Dashboard',        icon:'⚡' },
+  { id:'threat-matrix',  label:'Threat Matrix',    icon:'🎯' },
+  { id:'scan',           label:'Deep Scan',        icon:'🔬' },
+  { id:'network',        label:'Network Shield',   icon:'🌐' },
+  { id:'memory',         label:'Memory Lab',       icon:'🧠' },
+  { id:'forensics',      label:'Forensics',        icon:'🔎' },
+  { id:'risk',           label:'Risk & Analysis',  icon:'📊' },
+  { id:'recommendations',label:'Recommendations',  icon:'💡' },
+  { id:'darkweb',        label:'Dark Web',         icon:'🌑' },
+  { id:'reports',        label:'Reports',          icon:'📋' },
+  { id:'intel',          label:'Intel Feed',       icon:'📡' },
+  { id:'compliance',     label:'Compliance',       icon:'🛡️' },
+  { id:'training',       label:'Training',         icon:'🎮' },
+  { id:'settings',       label:'Settings',         icon:'⚙️' },
 ];
 
 export default function App() {
@@ -1086,7 +1091,7 @@ export default function App() {
       case 'settings': return (
         <div style={{ animation:'fade-in 0.3s ease' }}>
           <h2 style={{ fontSize:20, fontWeight:900, color:D.white, marginBottom:4 }}>⚙️ Settings & Configuration</h2>
-          <p style={{ fontSize:12, color:D.muted, marginBottom:20 }}>Enterprise deployment · Cross-platform · Biometric admin · Auto-update · Offline mode</p>
+          <p style={{ fontSize:12, color:D.muted, marginBottom:20 }}>Enterprise deployment · Cross-platform · Biometric admin · Auto-update · Help · Community · Multilingual</p>
 
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18, marginBottom:18 }}>
             <GlowCard color={D.blue} style={{ padding:24 }}>
@@ -1144,6 +1149,654 @@ export default function App() {
               <div style={{ marginTop:14, padding:'10px 14px', background:'rgba(255,215,0,0.06)', border:`1px solid ${D.gold}33`, borderRadius:8, fontSize:11, color:D.gold, fontWeight:700, textAlign:'center' }}>
                 🏆 Proprietary AI Core — Unbeatable Market Edge
               </div>
+            </GlowCard>
+          </div>
+
+          {/* Help, Community, Multilingual, Feedback, Dev Lifecycle */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))', gap:18, marginTop:18 }}>
+            <GlowCard color={D.cyan} style={{ padding:22 }}>
+              <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>📚 Help Center</div>
+              {[['Getting Started Guide','8 min read'],['Threat Response Handbook','22 min read'],['API Security Manual','15 min read'],['Compliance Checklist','12 min read'],['Video Walkthrough','18 videos']].map(([t,d])=>(
+                <div key={t} style={{ display:'flex', justifyContent:'space-between', padding:'8px 0', borderBottom:`1px solid ${D.border2}`, cursor:'pointer' }}
+                  onClick={()=>showToast(`📖 Opening: ${t}`,D.cyan)}>
+                  <span style={{ fontSize:11, color:D.text }}>{t}</span>
+                  <span style={{ fontSize:10, color:D.muted }}>{d}</span>
+                </div>
+              ))}
+              <button onClick={()=>showToast('🔍 Opening full documentation…',D.cyan)} style={{ marginTop:12, width:'100%', padding:'8px', borderRadius:6, border:`1px solid ${D.cyan}44`, background:'rgba(0,212,255,0.08)', color:D.cyan, fontSize:11, fontWeight:700, cursor:'pointer' }}>Open Full Docs →</button>
+            </GlowCard>
+
+            <GlowCard color={D.purple} style={{ padding:22 }}>
+              <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>👥 Community Forum</div>
+              <div style={{ fontSize:11, color:D.muted, marginBottom:12 }}>Connect with 14,800+ security professionals worldwide</div>
+              {[['🔥 LockBit 4.0 IOC sharing thread','847 replies'],['🛡️ Hardening Windows Server 2025','312 replies'],['🤖 AI false positive tuning tips','201 replies'],['🌑 Dark web monitor best practices','178 replies']].map(([t,r])=>(
+                <div key={t} style={{ padding:'8px 0', borderBottom:`1px solid ${D.border2}`, cursor:'pointer' }} onClick={()=>showToast('🌐 Opening community forum…',D.purple)}>
+                  <div style={{ fontSize:11, color:D.text }}>{t}</div>
+                  <div style={{ fontSize:9, color:D.muted, marginTop:2 }}>{r}</div>
+                </div>
+              ))}
+              <button onClick={()=>showToast('🌐 Opening community…',D.purple)} style={{ marginTop:12, width:'100%', padding:'8px', borderRadius:6, border:`1px solid ${D.purple}44`, background:'rgba(191,95,255,0.08)', color:D.purple, fontSize:11, fontWeight:700, cursor:'pointer' }}>Join Community →</button>
+            </GlowCard>
+
+            <GlowCard color={D.gold} style={{ padding:22 }}>
+              <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>🌍 Multilingual Support</div>
+              <div style={{ fontSize:11, color:D.muted, marginBottom:12 }}>Available in 24 languages — select your preference</div>
+              {[['English (Default)','Active','✓'],['French','Available',''],['Arabic','Available',''],['Spanish','Available',''],['Mandarin','Available',''],['Portuguese','Available','']].map(([l,s,a])=>(
+                <div key={l} style={{ display:'flex', justifyContent:'space-between', padding:'7px 0', borderBottom:`1px solid ${D.border2}`, cursor:'pointer' }}>
+                  <span style={{ fontSize:11, color:a?D.gold:D.text, fontWeight:a?700:400 }}>{l}</span>
+                  <span style={{ fontSize:10, color:a?D.gold:D.muted }}>{a||s}</span>
+                </div>
+              ))}
+            </GlowCard>
+
+            <GlowCard color={D.green} style={{ padding:22 }}>
+              <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>💬 Feedback & Dev Lifecycle</div>
+              <div style={{ marginBottom:14 }}>
+                <div style={{ fontSize:11, color:D.muted, marginBottom:8 }}>Share feedback to improve LeoNet</div>
+                <textarea placeholder="Describe a feature, bug, or improvement…" style={{ width:'100%', height:70, background:'#081420', border:`1px solid ${D.border}`, borderRadius:8, color:D.text, padding:'8px 12px', fontSize:11, resize:'none', outline:'none', boxSizing:'border-box' }} />
+                <button onClick={()=>showToast('✅ Feedback submitted — thank you!',D.green)} style={{ marginTop:8, width:'100%', padding:'8px', borderRadius:6, border:'none', background:`linear-gradient(135deg,${D.blue},${D.green})`, color:'#fff', fontSize:11, fontWeight:800, cursor:'pointer' }}>Submit Feedback</button>
+              </div>
+              <div style={{ fontSize:11, color:D.muted, marginBottom:8 }}>Secure Dev Lifecycle (SDL)</div>
+              {[['SAST scanning','In CI pipeline'],['Dependency audits','Weekly'],['Threat modelling','Per release'],['Pen-test cadence','Quarterly']].map(([k,v])=>(
+                <div key={k} style={{ display:'flex', justifyContent:'space-between', marginBottom:6 }}>
+                  <span style={{ fontSize:10, color:D.muted }}>{k}</span>
+                  <span style={{ fontSize:10, color:D.green, fontWeight:700 }}>{v}</span>
+                </div>
+              ))}
+            </GlowCard>
+          </div>
+        </div>
+      );
+
+      // ── FORENSICS ─────────────────────────────────────────────────────────
+      case 'forensics': return (
+        <div style={{ animation:'fade-in 0.3s ease' }}>
+          <h2 style={{ fontSize:20, fontWeight:900, color:D.white, marginBottom:4 }}>🔎 Forensics Lab</h2>
+          <p style={{ fontSize:12, color:D.muted, marginBottom:20 }}>Digital footprint · Web app scanning · API security · Social media · Password strength · Incident timeline</p>
+
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18, marginBottom:18 }}>
+            <GlowCard color={D.cyan} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>🌐 Digital Footprint Analysis</div>
+              <div style={{ fontSize:11, color:D.muted, marginBottom:14 }}>External attack surface of your organisation visible to adversaries</div>
+              {[
+                ['Public IPs Exposed','14',D.orange],['Open Ports Found','6',D.red],['Subdomains Indexed','38',D.cyan],
+                ['Leaked Credentials','3',D.red],['Paste Sites Matches','1',D.orange],['SSL Cert Issues','0',D.green],
+              ].map(([k,v,c])=>(
+                <div key={k} style={{ display:'flex', justifyContent:'space-between', padding:'8px 12px', background:'#081420', borderRadius:8, marginBottom:6, border:`1px solid ${c}22` }}>
+                  <span style={{ fontSize:11, color:D.text }}>{k}</span>
+                  <span style={{ fontSize:13, fontWeight:900, color:c, fontFamily:'monospace' }}>{v}</span>
+                </div>
+              ))}
+              <button style={{ marginTop:10, width:'100%', padding:'10px', borderRadius:8, border:'none', background:`linear-gradient(135deg,${D.blue},${D.cyan})`, color:'#fff', fontWeight:800, fontSize:12, cursor:'pointer' }}>🔍 Re-Scan Footprint</button>
+            </GlowCard>
+
+            <GlowCard color={D.orange} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>🕸️ Web Application Scanner</div>
+              {[
+                ['SQL Injection','2 issues found',D.red],['XSS Vulnerabilities','1 found',D.orange],
+                ['CSRF Protection','✓ Enabled',D.green],['Insecure Headers','3 missing',D.orange],
+                ['Broken Auth','✓ Clean',D.green],['Sensitive Data Exposure','1 endpoint',D.red],
+                ['OWASP Top 10','7/10 passing',D.cyan],['API Rate Limiting','✓ Active',D.green],
+              ].map(([k,v,c])=>(
+                <div key={k} style={{ display:'flex', justifyContent:'space-between', padding:'7px 12px', borderBottom:`1px solid ${D.border2}` }}>
+                  <span style={{ fontSize:11, color:D.text }}>{k}</span>
+                  <span style={{ fontSize:11, color:c, fontWeight:700 }}>{v}</span>
+                </div>
+              ))}
+            </GlowCard>
+          </div>
+
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:18, marginBottom:18 }}>
+            <GlowCard color={D.purple} style={{ padding:22 }}>
+              <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>🔐 Password Strength Assessment</div>
+              {[
+                ['Admin accounts','All strong ✓',D.green],['Service accounts','2 weak found',D.red],
+                ['Default credentials','0 detected',D.green],['Password reuse','1 account',D.orange],
+                ['Avg entropy','78 bits',D.cyan],['Crackable in 24h','2 passwords',D.red],
+              ].map(([k,v,c])=>(
+                <div key={k} style={{ display:'flex', justifyContent:'space-between', marginBottom:8 }}>
+                  <span style={{ fontSize:10, color:D.muted }}>{k}</span>
+                  <span style={{ fontSize:10, color:c, fontWeight:700 }}>{v}</span>
+                </div>
+              ))}
+              <button style={{ marginTop:8, width:'100%', padding:'8px', borderRadius:6, border:`1px solid ${D.purple}44`, background:'rgba(191,95,255,0.08)', color:D.purple, fontSize:11, fontWeight:700, cursor:'pointer' }}>Run Crack Simulation</button>
+            </GlowCard>
+
+            <GlowCard color={D.blue} style={{ padding:22 }}>
+              <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>🔌 API Security Assessment</div>
+              {[
+                ['Endpoints Scanned','42',D.cyan],['Auth Issues','3',D.red],['Data Leakage','2 endpoints',D.orange],
+                ['Rate Limiting','12 missing',D.orange],['TLS Version','All TLS 1.3',D.green],['Sensitive Fields Exposed','5',D.red],
+              ].map(([k,v,c])=>(
+                <div key={k} style={{ display:'flex', justifyContent:'space-between', marginBottom:8 }}>
+                  <span style={{ fontSize:10, color:D.muted }}>{k}</span>
+                  <span style={{ fontSize:10, color:c, fontWeight:700 }}>{v}</span>
+                </div>
+              ))}
+              <button style={{ marginTop:8, width:'100%', padding:'8px', borderRadius:6, border:`1px solid ${D.blue}44`, background:'rgba(26,122,255,0.08)', color:D.blue, fontSize:11, fontWeight:700, cursor:'pointer' }}>Full API Audit</button>
+            </GlowCard>
+
+            <GlowCard color={D.gold} style={{ padding:22 }}>
+              <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>📱 Social Media Insights</div>
+              {[
+                ['Brand mentions','284 scanned',D.cyan],['Leaked employee data','3 posts',D.red],
+                ['Credential hints','1 detected',D.orange],['Phishing impersonation','2 accounts',D.red],
+                ['Social engineering risk','Medium',D.orange],['Executive exposure','High',D.red],
+              ].map(([k,v,c])=>(
+                <div key={k} style={{ display:'flex', justifyContent:'space-between', marginBottom:8 }}>
+                  <span style={{ fontSize:10, color:D.muted }}>{k}</span>
+                  <span style={{ fontSize:10, color:c, fontWeight:700 }}>{v}</span>
+                </div>
+              ))}
+            </GlowCard>
+          </div>
+
+          <GlowCard color={D.cyan} style={{ padding:24 }}>
+            <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>🕐 Incident Timeline Reconstruction</div>
+            <div style={{ position:'relative', paddingLeft:24 }}>
+              {[
+                ['08:01:12','Initial access via browser exploit kit — CVE-2026-0089',D.red,'critical'],
+                ['08:03:44','Privilege escalation — LSASS memory dump (PID 788)',D.orange,'high'],
+                ['08:07:29','Lateral movement — SMB share enumeration (192.168.1.x)',D.orange,'high'],
+                ['08:12:05','Rootkit installed in kernel — Phantom.Rootkit.X9 dropper',D.red,'critical'],
+                ['08:18:33','Ransomware payload deployed — encryption initiated on D:\\',D.red,'critical'],
+                ['08:22:47','LeoNet detected anomaly — automated isolation triggered',D.cyan,'info'],
+                ['08:23:01','Threat quarantined — rollback to shadow copy initiated',D.green,'resolved'],
+              ].map(([t,e,c,sev],i)=>(
+                <div key={i} style={{ display:'flex', gap:16, marginBottom:16, position:'relative' }}>
+                  <div style={{ position:'absolute', left:-20, top:6, width:10, height:10, borderRadius:'50%', background:c, boxShadow:`0 0 8px ${c}`, flexShrink:0 }} />
+                  {i < 6 && <div style={{ position:'absolute', left:-16, top:16, width:2, height:'calc(100% + 4px)', background:`${c}44` }} />}
+                  <div style={{ fontFamily:'monospace', fontSize:10, color:D.muted, flexShrink:0, paddingTop:4, minWidth:70 }}>{t}</div>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontSize:12, color:D.text, fontWeight:600 }}>{e}</div>
+                    <span style={{ fontSize:9, color:c, fontWeight:800, textTransform:'uppercase', letterSpacing:1 }}>{sev}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button style={{ marginTop:8, padding:'9px 20px', borderRadius:8, border:`1px solid ${D.cyan}44`, background:'rgba(0,212,255,0.08)', color:D.cyan, fontWeight:700, fontSize:12, cursor:'pointer' }}>📥 Export Timeline Report</button>
+          </GlowCard>
+        </div>
+      );
+
+      // ── RISK & ANALYSIS ────────────────────────────────────────────────────
+      case 'risk': return (
+        <div style={{ animation:'fade-in 0.3s ease' }}>
+          <h2 style={{ fontSize:20, fontWeight:900, color:D.white, marginBottom:4 }}>📊 Risk & Analysis</h2>
+          <p style={{ fontSize:12, color:D.muted, marginBottom:20 }}>Risk assessment · Data classification · User access · Root cause · Historical trends · IDS · Log management</p>
+
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(165px,1fr))', gap:12, marginBottom:20 }}>
+            {[['Overall Risk Score','74 / 100',D.orange],['Critical Assets','12',D.red],['IDS Alerts Today','38',D.orange],['Log Events','847,293',D.cyan],['Data Classes Found','6',D.blue],['Anomalies Detected','14',D.purple]].map(([l,v,c])=>(
+              <GlowCard key={l} color={c} style={{ padding:'14px 18px' }}>
+                <div style={{ fontSize:10, color:D.muted, textTransform:'uppercase', letterSpacing:1, marginBottom:6 }}>{l}</div>
+                <div style={{ fontSize:20, fontWeight:900, color:c, fontFamily:'monospace' }}>{v}</div>
+              </GlowCard>
+            ))}
+          </div>
+
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18, marginBottom:18 }}>
+            <GlowCard color={D.red} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>⚖️ Risk Assessment Matrix</div>
+              {[
+                ['UEFI Firmware Attack','Critical','Very High','98'],
+                ['Ransomware Spread','Critical','High','94'],
+                ['Supply Chain Compromise','High','High','81'],
+                ['Credential Theft','High','Medium','76'],
+                ['IoT Botnet Expansion','Medium','High','68'],
+                ['Insider Data Exfil','Medium','Medium','55'],
+                ['DDoS Disruption','Low','High','42'],
+                ['Phishing Campaign','Low','Very High','39'],
+              ].map(([threat,sev,prob,score])=>(
+                <div key={threat} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 12px', background:'#081420', borderRadius:8, marginBottom:6, border:`1px solid ${sevColor(sev.toLowerCase())}22` }}>
+                  <div>
+                    <div style={{ fontSize:11, color:D.text, fontWeight:600 }}>{threat}</div>
+                    <div style={{ fontSize:9, color:D.muted, marginTop:2 }}>Severity: {sev} · Probability: {prob}</div>
+                  </div>
+                  <div style={{ fontSize:16, fontWeight:900, color:sevColor(sev.toLowerCase()), fontFamily:'monospace' }}>{score}</div>
+                </div>
+              ))}
+            </GlowCard>
+
+            <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+              <GlowCard color={D.cyan} style={{ padding:22 }}>
+                <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>🗂️ Data Classification</div>
+                {[
+                  ['PII / Personal Data','2,847 files',D.red,'Critical'],
+                  ['Financial Records','891 files',D.orange,'Confidential'],
+                  ['Health Records (PHI)','234 files',D.red,'Critical'],
+                  ['Intellectual Property','1,204 files',D.orange,'Confidential'],
+                  ['Internal Communications','8,491 files',D.cyan,'Internal'],
+                  ['Public Data','14,302 files',D.green,'Public'],
+                ].map(([cls,cnt,c,label])=>(
+                  <div key={cls} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8, padding:'7px 10px', background:'#081420', borderRadius:6 }}>
+                    <div>
+                      <div style={{ fontSize:11, color:D.text, fontWeight:600 }}>{cls}</div>
+                      <div style={{ fontSize:9, color:D.muted }}>{cnt}</div>
+                    </div>
+                    <span style={{ fontSize:9, fontWeight:800, color:c, background:`${c}15`, border:`1px solid ${c}33`, borderRadius:10, padding:'2px 8px', textTransform:'uppercase' }}>{label}</span>
+                  </div>
+                ))}
+              </GlowCard>
+
+              <GlowCard color={D.purple} style={{ padding:22 }}>
+                <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>👤 User Access Analysis</div>
+                {[
+                  ['Over-privileged accounts','7',D.red],['Dormant accounts','12',D.orange],
+                  ['Shared credentials','3',D.red],['Admin without MFA','0',D.green],
+                  ['Accounts reviewed (30d)','89%',D.cyan],['Zero-trust violations','2',D.orange],
+                ].map(([k,v,c])=>(
+                  <div key={k} style={{ display:'flex', justifyContent:'space-between', marginBottom:8 }}>
+                    <span style={{ fontSize:10, color:D.muted }}>{k}</span>
+                    <span style={{ fontSize:11, color:c, fontWeight:800 }}>{v}</span>
+                  </div>
+                ))}
+                <button style={{ marginTop:8, width:'100%', padding:'8px', borderRadius:6, border:`1px solid ${D.purple}44`, background:'rgba(191,95,255,0.08)', color:D.purple, fontSize:11, fontWeight:700, cursor:'pointer' }}>Review All Accounts</button>
+              </GlowCard>
+            </div>
+          </div>
+
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18, marginBottom:18 }}>
+            <GlowCard color={D.orange} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>🔍 Root Cause Analysis</div>
+              <div style={{ padding:'14px 16px', background:'rgba(255,107,53,0.08)', border:`1px solid ${D.orange}33`, borderRadius:10, marginBottom:14 }}>
+                <div style={{ fontSize:11, fontWeight:700, color:D.orange, marginBottom:4 }}>Incident #INC-2026-0041</div>
+                <div style={{ fontSize:12, color:D.text, fontWeight:700, marginBottom:8 }}>Phantom.Rootkit.X9 Infection Chain</div>
+                {['1. User clicked phishing link → browser exploit triggered','2. Sandbox escape via CVE-2026-0089 → code execution','3. LSASS dumped → admin credentials stolen','4. Lateral movement across subnet 192.168.1.0/24','5. Rootkit dropped in kernel driver → persistence','Root Cause: Unpatched browser + missing EDR on endpoint'].map((s,i)=>(
+                  <div key={i} style={{ fontSize:11, color: i===5?D.orange:D.muted, marginBottom:5, paddingLeft:i===5?0:8, fontWeight:i===5?700:400 }}>{s}</div>
+                ))}
+              </div>
+              <button style={{ padding:'9px 20px', borderRadius:8, border:'none', background:`linear-gradient(135deg,${D.orange},${D.red})`, color:'#fff', fontWeight:800, fontSize:12, cursor:'pointer' }}>Run AI Root Cause Analysis</button>
+            </GlowCard>
+
+            <GlowCard color={D.gold} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>📈 Historical Threat Trends</div>
+              {[
+                ['Jan 2026','Ransomware',142],['Feb 2026','Phishing',287],
+                ['Mar 2026','Rootkit',89],['Apr 2026','Zero-Day',34],
+                ['May 2026','Ransomware',198],
+              ].map(({} = {}, i, arr) => null).filter(Boolean)}
+              {[
+                {month:'Jan',count:142,type:'Ransomware'},
+                {month:'Feb',count:287,type:'Phishing'},
+                {month:'Mar',count:89,type:'Rootkit'},
+                {month:'Apr',count:34,type:'Zero-Day'},
+                {month:'May',count:198,type:'Ransomware (↑119%)'},
+              ].map(r => (
+                <div key={r.month} style={{ display:'flex', gap:12, alignItems:'center', marginBottom:10 }}>
+                  <div style={{ width:32, fontSize:10, color:D.muted }}>{r.month}</div>
+                  <div style={{ flex:1, height:8, background:D.border, borderRadius:4, overflow:'hidden' }}>
+                    <div style={{ height:'100%', width:`${(r.count/287)*100}%`, background:`linear-gradient(90deg,${D.gold}88,${D.gold})`, borderRadius:4 }} />
+                  </div>
+                  <div style={{ width:50, fontSize:10, color:D.gold, fontFamily:'monospace', fontWeight:700 }}>{r.count}</div>
+                  <div style={{ fontSize:10, color:D.muted, width:120 }}>{r.type}</div>
+                </div>
+              ))}
+              <div style={{ marginTop:14, padding:'10px 14px', background:'rgba(255,215,0,0.06)', border:`1px solid ${D.gold}33`, borderRadius:8, fontSize:11, color:D.gold }}>
+                AI Pattern: Ransomware resurgence predicted in Q3 2026 — confidence 87%
+              </div>
+            </GlowCard>
+          </div>
+
+          <GlowCard color={D.blue} style={{ padding:24 }}>
+            <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>📋 Intrusion Detection System — Live Alerts</div>
+            <div style={{ overflowX:'auto' }}>
+              <table style={{ width:'100%', borderCollapse:'collapse', fontSize:11 }}>
+                <thead><tr style={{ background:'#061428' }}>{['Time','Rule','Source IP','Destination','Protocol','Signature','Severity','Action'].map(h=>(
+                  <th key={h} style={{ padding:'8px 12px', textAlign:'left', color:D.muted, fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:1, borderBottom:`1px solid ${D.border}` }}>{h}</th>
+                ))}</tr></thead>
+                <tbody>{[
+                  {t:'08:34:22',rule:'ET-TOR-001',src:'185.220.101.42',dst:'192.168.1.100',proto:'TCP',sig:'TOR Exit Node C2 Beacon',sev:'critical'},
+                  {t:'08:32:11',rule:'ET-BRUTE-009',src:'91.108.4.200',dst:'192.168.1.100',proto:'SSH',sig:'SSH Brute Force > 100 attempts',sev:'high'},
+                  {t:'08:28:44',rule:'ET-SQL-003',src:'192.168.1.44',dst:'10.0.0.5',proto:'HTTP',sig:'SQL Injection Attempt UNION SELECT',sev:'high'},
+                  {t:'08:21:00',rule:'ET-SCAN-007',src:'45.33.32.156',dst:'192.168.1.0/24',proto:'TCP',sig:'Nmap Port Scan Detected',sev:'medium'},
+                  {t:'08:14:33',rule:'ET-MALWARE-012',src:'192.168.1.55',dst:'185.220.101.1',proto:'HTTPS',sig:'Emotet C2 Check-In Pattern',sev:'critical'},
+                ].map((r,i)=>(
+                  <tr key={i} style={{ background:i%2===0?'#081420':'#0A1828', borderBottom:`1px solid ${D.border2}` }}>
+                    <td style={{ padding:'8px 12px', fontFamily:'monospace', color:D.muted, fontSize:10 }}>{r.t}</td>
+                    <td style={{ padding:'8px 12px', color:D.cyan, fontFamily:'monospace', fontSize:10, fontWeight:700 }}>{r.rule}</td>
+                    <td style={{ padding:'8px 12px', color:D.text, fontFamily:'monospace', fontSize:10 }}>{r.src}</td>
+                    <td style={{ padding:'8px 12px', color:D.text, fontFamily:'monospace', fontSize:10 }}>{r.dst}</td>
+                    <td style={{ padding:'8px 12px', color:D.muted }}>{r.proto}</td>
+                    <td style={{ padding:'8px 12px', color:D.text }}>{r.sig}</td>
+                    <td style={{ padding:'8px 12px' }}><span style={{ color:sevColor(r.sev), fontWeight:800, fontSize:10, textTransform:'uppercase' }}>{r.sev}</span></td>
+                    <td style={{ padding:'8px 12px' }}><button style={{ background:D.red, color:'#fff', border:'none', borderRadius:4, padding:'3px 10px', fontSize:10, fontWeight:800, cursor:'pointer' }}>Block</button></td>
+                  </tr>
+                ))}</tbody>
+              </table>
+            </div>
+          </GlowCard>
+        </div>
+      );
+
+      // ── RECOMMENDATIONS ────────────────────────────────────────────────────
+      case 'recommendations': return (
+        <div style={{ animation:'fade-in 0.3s ease' }}>
+          <h2 style={{ fontSize:20, fontWeight:900, color:D.white, marginBottom:4 }}>💡 Recommendations Center</h2>
+          <p style={{ fontSize:12, color:D.muted, marginBottom:20 }}>Patches · Policy · Hardening · Playbooks · Whitelisting · Insider threat · Hardware · Backup</p>
+
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18, marginBottom:18 }}>
+            <GlowCard color={D.red} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>🔧 Patch Management</div>
+              {[
+                {pkg:'Chrome 123.0.6312.58',cve:'CVE-2026-0089',sev:'critical',days:3},
+                {pkg:'Windows Kernel 22H2',cve:'CVE-2026-0041',sev:'critical',days:7},
+                {pkg:'OpenSSL 3.2.1',cve:'CVE-2026-0102',sev:'high',days:12},
+                {pkg:'Apache 2.4.57',cve:'CVE-2026-0055',sev:'high',days:14},
+                {pkg:'Node.js 20.11.0',cve:'CVE-2026-0117',sev:'medium',days:21},
+              ].map(p=>(
+                <div key={p.pkg} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 14px', background:'#081420', borderRadius:8, marginBottom:8, border:`1px solid ${sevColor(p.sev)}22` }}>
+                  <div>
+                    <div style={{ fontSize:12, color:D.text, fontWeight:700 }}>{p.pkg}</div>
+                    <div style={{ fontSize:10, color:D.muted, marginTop:2 }}>{p.cve} · {p.days} days overdue</div>
+                  </div>
+                  <button style={{ background:`linear-gradient(135deg,${D.blue},${D.cyan})`, color:'#fff', border:'none', borderRadius:6, padding:'5px 12px', fontSize:10, fontWeight:800, cursor:'pointer' }}>Auto-Patch</button>
+                </div>
+              ))}
+              <button style={{ marginTop:4, width:'100%', padding:'10px', borderRadius:8, border:'none', background:`linear-gradient(135deg,${D.red},${D.orange})`, color:'#fff', fontWeight:800, fontSize:12, cursor:'pointer' }}>⚡ Patch All Critical Now</button>
+            </GlowCard>
+
+            <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+              <GlowCard color={D.cyan} style={{ padding:22 }}>
+                <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>🔒 Configuration Hardening</div>
+                {[
+                  ['Disable legacy SMBv1','Critical — apply now',D.red],
+                  ['Enable Kernel Guard','High — apply now',D.orange],
+                  ['Restrict PowerShell execution','High',D.orange],
+                  ['Enable Windows Defender ASR','Medium',D.cyan],
+                  ['Disable AutoRun','Medium',D.cyan],
+                  ['Enable LAPS for local admin','High',D.orange],
+                ].map(([rule,note,c])=>(
+                  <div key={rule} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8, padding:'7px 10px', background:'#081420', borderRadius:6 }}>
+                    <div>
+                      <div style={{ fontSize:11, color:D.text }}>{rule}</div>
+                      <div style={{ fontSize:9, color:c, marginTop:2 }}>{note}</div>
+                    </div>
+                    <button style={{ background:'none', border:`1px solid ${c}44`, borderRadius:4, color:c, padding:'3px 10px', fontSize:9, fontWeight:800, cursor:'pointer' }}>Apply</button>
+                  </div>
+                ))}
+              </GlowCard>
+
+              <GlowCard color={D.green} style={{ padding:22 }}>
+                <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>✅ Application Whitelisting</div>
+                <div style={{ fontSize:11, color:D.muted, marginBottom:12 }}>Only approved apps can execute — all others blocked</div>
+                {[['Approved Apps','247',D.green],['Blocked Today','34',D.red],['Pending Review','8',D.orange],['Last Updated','10 min ago',D.cyan]].map(([k,v,c])=>(
+                  <div key={k} style={{ display:'flex', justifyContent:'space-between', marginBottom:8 }}>
+                    <span style={{ fontSize:11, color:D.muted }}>{k}</span>
+                    <span style={{ fontSize:11, color:c, fontWeight:800 }}>{v}</span>
+                  </div>
+                ))}
+                <button style={{ marginTop:8, width:'100%', padding:'8px', borderRadius:6, border:`1px solid ${D.green}44`, background:'rgba(0,255,136,0.08)', color:D.green, fontSize:11, fontWeight:700, cursor:'pointer' }}>Manage Whitelist</button>
+              </GlowCard>
+            </div>
+          </div>
+
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:18, marginBottom:18 }}>
+            <GlowCard color={D.orange} style={{ padding:22 }}>
+              <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>🕵️ Insider Threat Mitigation</div>
+              {[
+                ['User Entity Behavior Analytics','Active'],['Privileged Activity Monitoring','Active'],
+                ['Data Loss Prevention (DLP)','Active'],['USB Block Policy','Enforced'],
+                ['Print Screen Restriction','Enabled'],['Email DLP Scanning','Active'],
+              ].map(([k,v])=>(
+                <div key={k} style={{ display:'flex', justifyContent:'space-between', marginBottom:8, padding:'6px 8px', background:'#081420', borderRadius:6 }}>
+                  <span style={{ fontSize:10, color:D.text }}>{k}</span>
+                  <span style={{ fontSize:10, color:D.green, fontWeight:700 }}>{v}</span>
+                </div>
+              ))}
+            </GlowCard>
+
+            <GlowCard color={D.blue} style={{ padding:22 }}>
+              <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>🖥️ Hardware Recommendations</div>
+              {[
+                ['TPM 2.0 Module','Required on 3 hosts',D.orange],
+                ['HSM for key storage','Strongly advised',D.orange],
+                ['NIC with DPDK','For IDS performance',D.cyan],
+                ['Encrypted SSD','2 unencrypted drives',D.red],
+                ['BIOS/UEFI Update','4 hosts outdated',D.orange],
+              ].map(([k,v,c])=>(
+                <div key={k} style={{ marginBottom:8 }}>
+                  <div style={{ fontSize:11, color:D.text }}>{k}</div>
+                  <div style={{ fontSize:10, color:c }}>{v}</div>
+                </div>
+              ))}
+            </GlowCard>
+
+            <GlowCard color={D.purple} style={{ padding:22 }}>
+              <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>💾 Backup Recommendations</div>
+              {[
+                ['3-2-1 Rule','✓ Configured',D.green],['Offsite Backup','AWS S3 + Azure',D.green],
+                ['Last Backup','2026-05-16 02:00',D.cyan],['Recovery Tested','2026-05-10',D.cyan],
+                ['Immutable Copies','Enabled',D.green],['Blockchain Verification','Active',D.green],
+                ['RTO Target','< 4 minutes',D.gold],
+              ].map(([k,v,c])=>(
+                <div key={k} style={{ display:'flex', justifyContent:'space-between', marginBottom:8 }}>
+                  <span style={{ fontSize:10, color:D.muted }}>{k}</span>
+                  <span style={{ fontSize:10, color:c, fontWeight:700 }}>{v}</span>
+                </div>
+              ))}
+            </GlowCard>
+          </div>
+
+          <GlowCard color={D.gold} style={{ padding:24 }}>
+            <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>📖 Incident Response Playbooks</div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))', gap:14 }}>
+              {[
+                {name:'Ransomware Response',steps:8,status:'active',time:'< 15 min',icon:'🔐'},
+                {name:'Data Breach Protocol',steps:12,status:'active',time:'< 30 min',icon:'🚨'},
+                {name:'DDoS Mitigation',steps:6,status:'active',time:'< 5 min',icon:'🌊'},
+                {name:'Insider Threat',steps:10,status:'active',time:'< 20 min',icon:'🕵️'},
+                {name:'Zero-Day Response',steps:9,status:'draft',time:'< 45 min',icon:'⚡'},
+                {name:'Supply Chain Attack',steps:14,status:'draft',time:'< 60 min',icon:'🔗'},
+              ].map(p=>(
+                <div key={p.name} style={{ background:'#081420', border:`1px solid ${p.status==='active'?D.gold:D.border}33`, borderRadius:12, padding:'16px' }}>
+                  <div style={{ fontSize:22, marginBottom:8 }}>{p.icon}</div>
+                  <div style={{ fontSize:12, fontWeight:700, color:D.text, marginBottom:4 }}>{p.name}</div>
+                  <div style={{ fontSize:10, color:D.muted, marginBottom:8 }}>{p.steps} steps · Response: {p.time}</div>
+                  <span style={{ fontSize:9, fontWeight:800, color:p.status==='active'?D.green:D.orange, background:`${p.status==='active'?D.green:D.orange}15`, border:`1px solid ${p.status==='active'?D.green:D.orange}33`, borderRadius:10, padding:'2px 8px', textTransform:'uppercase' }}>{p.status}</span>
+                </div>
+              ))}
+            </div>
+          </GlowCard>
+        </div>
+      );
+
+      // ── DARK WEB ───────────────────────────────────────────────────────────
+      case 'darkweb': return (
+        <div style={{ animation:'fade-in 0.3s ease' }}>
+          <h2 style={{ fontSize:20, fontWeight:900, color:D.white, marginBottom:4 }}>🌑 Dark Web Intelligence</h2>
+          <p style={{ fontSize:12, color:D.muted, marginBottom:20 }}>Dark web monitoring · Geolocation security · API data exposure · Third-party assessments · Strategic partnerships</p>
+
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(165px,1fr))', gap:12, marginBottom:20 }}>
+            {[['Dark Web Mentions','7',D.red],['Leaked Credentials','3 found',D.red],['Active Marketplaces','4 monitored',D.orange],['Threat Actors Tracked','18',D.purple],['Forums Indexed','142',D.cyan],['Last Crawl','08:41:00',D.gold]].map(([l,v,c])=>(
+              <GlowCard key={l} color={c} style={{ padding:'14px 18px' }}>
+                <div style={{ fontSize:10, color:D.muted, textTransform:'uppercase', letterSpacing:1, marginBottom:6 }}>{l}</div>
+                <div style={{ fontSize:18, fontWeight:900, color:c, fontFamily:'monospace' }}>{v}</div>
+              </GlowCard>
+            ))}
+          </div>
+
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18, marginBottom:18 }}>
+            <GlowCard color={D.red} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>🌑 Dark Web Findings</div>
+              {[
+                {type:'Credential Dump',detail:'3 employee emails + hashed passwords found on BreachForums',sev:'critical',date:'2026-05-15'},
+                {type:'Internal Doc Leak',detail:'Company network diagram shared on RaidForums',sev:'critical',date:'2026-05-12'},
+                {type:'Ransomware Listing',detail:'Specter group claims to have 40GB of financial data',sev:'high',date:'2026-05-10'},
+                {type:'Phishing Kit Sale',detail:'Custom phishing kit targeting your login portal',sev:'high',date:'2026-05-08'},
+              ].map((f,i)=>(
+                <div key={i} style={{ padding:'12px 14px', background:'#081420', borderRadius:10, marginBottom:10, borderLeft:`3px solid ${sevColor(f.sev)}` }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
+                    <span style={{ fontSize:12, fontWeight:800, color:D.text }}>{f.type}</span>
+                    <span style={{ fontSize:9, color:sevColor(f.sev), fontWeight:800, textTransform:'uppercase' }}>{f.sev}</span>
+                  </div>
+                  <div style={{ fontSize:11, color:D.muted, lineHeight:1.5 }}>{f.detail}</div>
+                  <div style={{ fontSize:9, color:D.muted, marginTop:4 }}>{f.date}</div>
+                </div>
+              ))}
+            </GlowCard>
+
+            <GlowCard color={D.cyan} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>🗺️ Geolocation Security</div>
+              <div style={{ marginBottom:14 }}>
+                <div style={{ fontSize:11, color:D.muted, marginBottom:10 }}>Login anomalies detected by geolocation analysis</div>
+                {[
+                  ['Admin login — Moscow, Russia','Blocked — not whitelisted',D.red],
+                  ['VPN from Tor exit node — Tokyo','Blocked — policy violation',D.red],
+                  ['Normal login — Freetown, SL','Allowed',D.green],
+                  ['Login from new country — Brazil','Alert sent · Monitoring',D.orange],
+                ].map(([ev,act,c])=>(
+                  <div key={ev} style={{ padding:'8px 12px', background:'#081420', borderRadius:8, marginBottom:6 }}>
+                    <div style={{ fontSize:11, color:D.text }}>{ev}</div>
+                    <div style={{ fontSize:10, color:c, marginTop:2, fontWeight:700 }}>{act}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ padding:'12px 14px', background:'rgba(0,212,255,0.06)', border:`1px solid ${D.cyan}33`, borderRadius:8, fontSize:11, color:D.cyan }}>
+                <div style={{ fontWeight:700, marginBottom:4 }}>Geo-Fencing Rules Active</div>
+                <div style={{ color:D.muted }}>Admin access allowed from: SL, UK, US only · Alerts for all other regions</div>
+              </div>
+            </GlowCard>
+          </div>
+
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18 }}>
+            <GlowCard color={D.purple} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>🔌 API Data Exposure Analysis</div>
+              {[
+                {endpoint:'/api/v1/users',exposure:'SSN, email, DOB returned unmasked',risk:'critical'},
+                {endpoint:'/api/v2/reports',exposure:'Internal IP addresses in response',risk:'high'},
+                {endpoint:'/api/v1/auth/token',exposure:'Token not expiring correctly',risk:'high'},
+                {endpoint:'/api/v3/health',exposure:'Stack traces in error responses',risk:'medium'},
+                {endpoint:'/api/v1/payments',exposure:'✓ Fully masked — PCI compliant',risk:'safe'},
+              ].map(a=>(
+                <div key={a.endpoint} style={{ padding:'9px 12px', background:'#081420', borderRadius:8, marginBottom:8, borderLeft:`3px solid ${sevColor(a.risk)}` }}>
+                  <div style={{ fontFamily:'monospace', fontSize:11, color:D.cyan, fontWeight:700 }}>{a.endpoint}</div>
+                  <div style={{ fontSize:10, color:D.muted, marginTop:3 }}>{a.exposure}</div>
+                </div>
+              ))}
+            </GlowCard>
+
+            <GlowCard color={D.gold} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>🤝 Strategic Partnerships</div>
+              {[
+                {name:'FS-ISAC',desc:'Financial Services threat sharing consortium',status:'Active member',icon:'🏦'},
+                {name:'MITRE ATT&CK',desc:'TTPs database · 600+ technique coverage',status:'Integrated',icon:'🗡️'},
+                {name:'CISA KEV',desc:'Known Exploited Vulnerabilities feed',status:'Live sync',icon:'🏛️'},
+                {name:'VT Enterprise',desc:'VirusTotal private intelligence feed',status:'Active',icon:'🔬'},
+                {name:'Shodan Monitor',desc:'Internet-facing asset monitoring',status:'Active',icon:'🌐'},
+              ].map(p=>(
+                <div key={p.name} style={{ display:'flex', gap:12, alignItems:'center', padding:'10px 0', borderBottom:`1px solid ${D.border2}` }}>
+                  <span style={{ fontSize:22 }}>{p.icon}</span>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontSize:12, fontWeight:700, color:D.text }}>{p.name}</div>
+                    <div style={{ fontSize:10, color:D.muted, marginTop:2 }}>{p.desc}</div>
+                  </div>
+                  <span style={{ fontSize:9, color:D.green, fontWeight:800 }}>{p.status}</span>
+                </div>
+              ))}
+            </GlowCard>
+          </div>
+        </div>
+      );
+
+      // ── REPORTS ────────────────────────────────────────────────────────────
+      case 'reports': return (
+        <div style={{ animation:'fade-in 0.3s ease' }}>
+          <h2 style={{ fontSize:20, fontWeight:900, color:D.white, marginBottom:4 }}>📋 Reports Center</h2>
+          <p style={{ fontSize:12, color:D.muted, marginBottom:20 }}>Executive summaries · Incident templates · Compliance reports · Scheduled · Real-time · Collaborative · Audit trail</p>
+
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))', gap:14, marginBottom:22 }}>
+            {[
+              {icon:'📊',label:'Executive Summary',desc:'Board-level threat overview',color:D.gold},
+              {icon:'🚨',label:'Incident Report',desc:'Full incident documentation',color:D.red},
+              {icon:'🛡️',label:'Compliance Report',desc:'GDPR/HIPAA/DoD audit-ready',color:D.green},
+              {icon:'📡',label:'Threat Intel Report',desc:'IOC, TTPs, attribution',color:D.cyan},
+              {icon:'🌿',label:'Environmental Impact',desc:'Carbon footprint of security ops',color:D.green},
+              {icon:'🤖',label:'AI Post-Incident',desc:'ML analysis of response quality',color:D.purple},
+            ].map(r=>(
+              <GlowCard key={r.label} color={r.color} style={{ padding:20, cursor:'pointer' }}
+                onClick={()=>showToast(`📄 Generating ${r.label}…`, r.color)}>
+                <div style={{ fontSize:28, marginBottom:10 }}>{r.icon}</div>
+                <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:4 }}>{r.label}</div>
+                <div style={{ fontSize:10, color:D.muted, marginBottom:14 }}>{r.desc}</div>
+                <div style={{ fontSize:10, fontWeight:700, color:r.color }}>Generate →</div>
+              </GlowCard>
+            ))}
+          </div>
+
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18, marginBottom:18 }}>
+            <GlowCard color={D.gold} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>📊 Executive Summary Preview</div>
+              <div style={{ background:`linear-gradient(135deg,#0A2040,#061428)`, borderRadius:12, padding:20, marginBottom:14 }}>
+                <div style={{ fontSize:10, color:D.muted, textTransform:'uppercase', letterSpacing:2, marginBottom:8 }}>LeoNet Defense · Board Report</div>
+                <div style={{ fontSize:16, fontWeight:900, color:D.white, marginBottom:4 }}>Cybersecurity Status — May 2026</div>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:10, marginTop:14 }}>
+                  {[['Threat Index','74/100','High'],['Incidents','3 critical','Resolved'],['Uptime','99.999%','On target']].map(([k,v,s])=>(
+                    <div key={k} style={{ background:'rgba(255,255,255,0.04)', borderRadius:8, padding:10, textAlign:'center' }}>
+                      <div style={{ fontSize:9, color:D.muted, marginBottom:4 }}>{k}</div>
+                      <div style={{ fontSize:14, fontWeight:900, color:D.gold }}>{v}</div>
+                      <div style={{ fontSize:9, color:D.muted, marginTop:2 }}>{s}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <button onClick={()=>showToast('📊 Executive summary PDF generated.',D.gold)} style={{ width:'100%', padding:'10px', borderRadius:8, border:'none', background:`linear-gradient(135deg,${D.gold},${D.orange})`, color:'#000', fontWeight:800, fontSize:12, cursor:'pointer' }}>Download PDF</button>
+            </GlowCard>
+
+            <GlowCard color={D.red} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>📝 Incident Report Templates</div>
+              {[
+                {name:'Ransomware Incident Report',fields:18,standard:'NIST SP 800-61'},
+                {name:'Data Breach Notification',fields:24,standard:'GDPR Art. 33'},
+                {name:'Zero-Day Exploitation Report',fields:15,standard:'CVE/NVD'},
+                {name:'Insider Threat Report',fields:22,standard:'ISO 27035'},
+                {name:'DDoS Attack Report',fields:12,standard:'ENISA'},
+              ].map(t=>(
+                <div key={t.name} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'9px 12px', background:'#081420', borderRadius:8, marginBottom:8 }}>
+                  <div>
+                    <div style={{ fontSize:11, color:D.text, fontWeight:700 }}>{t.name}</div>
+                    <div style={{ fontSize:9, color:D.muted, marginTop:2 }}>{t.fields} fields · {t.standard}</div>
+                  </div>
+                  <button onClick={()=>showToast(`📝 Opening ${t.name} template…`,D.cyan)} style={{ background:'none', border:`1px solid ${D.cyan}44`, borderRadius:4, color:D.cyan, padding:'4px 10px', fontSize:10, fontWeight:700, cursor:'pointer' }}>Use</button>
+                </div>
+              ))}
+            </GlowCard>
+          </div>
+
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18 }}>
+            <GlowCard color={D.purple} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>👥 Collaborative Reporting</div>
+              <div style={{ fontSize:11, color:D.muted, marginBottom:14 }}>Team members actively working on reports</div>
+              {[
+                {user:'Director Chen',role:'CISO',action:'Reviewing Executive Summary',time:'2 min ago',avatar:'👩‍💼'},
+                {user:'Analyst Koroma',role:'SOC L2',action:'Building Incident Report #041',time:'8 min ago',avatar:'👨‍💻'},
+                {user:'Eng. Diallo',role:'Network',action:'Adding forensics to Net Report',time:'14 min ago',avatar:'👨‍🔬'},
+              ].map(u=>(
+                <div key={u.user} style={{ display:'flex', gap:12, padding:'10px 12px', background:'#081420', borderRadius:10, marginBottom:8, border:`1px solid ${D.purple}22` }}>
+                  <div style={{ width:36, height:36, borderRadius:'50%', background:`linear-gradient(135deg,${D.purple},${D.blue})`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, flexShrink:0 }}>{u.avatar}</div>
+                  <div>
+                    <div style={{ fontSize:12, fontWeight:700, color:D.white }}>{u.user} <span style={{ fontWeight:400, color:D.muted }}>· {u.role}</span></div>
+                    <div style={{ fontSize:10, color:D.muted, marginTop:2 }}>{u.action}</div>
+                    <div style={{ fontSize:9, color:D.muted, marginTop:2 }}>{u.time}</div>
+                  </div>
+                </div>
+              ))}
+            </GlowCard>
+
+            <GlowCard color={D.green} style={{ padding:24 }}>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>🕐 Scheduled Reports</div>
+              {[
+                {name:'Daily Threat Summary',schedule:'Every day 06:00',recipients:'SOC Team',format:'PDF + Email'},
+                {name:'Weekly Executive Brief',schedule:'Every Monday 08:00',recipients:'Board',format:'PDF'},
+                {name:'Monthly Compliance',schedule:'1st of month',recipients:'Legal, CISO',format:'PDF + CSV'},
+                {name:'Real-Time Incident',schedule:'On incident trigger',recipients:'All SOC',format:'Push + Email'},
+                {name:'Environmental Impact',schedule:'Quarterly',recipients:'Sustainability',format:'PDF'},
+              ].map(r=>(
+                <div key={r.name} style={{ padding:'9px 12px', background:'#081420', borderRadius:8, marginBottom:8 }}>
+                  <div style={{ fontSize:11, color:D.white, fontWeight:700 }}>{r.name}</div>
+                  <div style={{ fontSize:9, color:D.muted, marginTop:3 }}>{r.schedule} · To: {r.recipients} · {r.format}</div>
+                </div>
+              ))}
+              <button onClick={()=>showToast('⏰ Report schedule saved.',D.green)} style={{ marginTop:8, width:'100%', padding:'9px', borderRadius:8, border:`1px solid ${D.green}44`, background:'rgba(0,255,136,0.08)', color:D.green, fontWeight:700, fontSize:12, cursor:'pointer' }}>+ Add Schedule</button>
             </GlowCard>
           </div>
         </div>
