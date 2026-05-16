@@ -824,6 +824,7 @@ const NAV = [
   { id:'intel',          label:'Intel Feed',       icon:'📡' },
   { id:'compliance',     label:'Compliance',       icon:'🛡️' },
   { id:'training',       label:'Training',         icon:'🎮' },
+  { id:'agents',         label:'Agents',           icon:'🖥️' },
   { id:'cert-roadmap',   label:'Cert. Roadmap',    icon:'🏆' },
   { id:'client-report',  label:'Client Report',    icon:'📄' },
   { id:'settings',       label:'Settings',         icon:'⚙️' },
@@ -2196,6 +2197,205 @@ export default function App() {
           </div>
         </div>
       );
+
+      // ── AGENTS (LeoNet Sentinel) ───────────────────────────────────────────
+      case 'agents': {
+        const [agentData, setAgentData]       = React.useState({ agents:[], total:0, online:0 });
+        const [selectedAgent, setSelAgent]    = React.useState(null);
+        const [agentLoading, setAgentLoading] = React.useState(false);
+        const [cmdResult, setCmdResult]       = React.useState(null);
+
+        React.useEffect(() => {
+          const poll = async () => {
+            try {
+              const r = await fetch('/api/sentinel/data');
+              const d = await r.json();
+              setAgentData(d);
+              if (selectedAgent) {
+                const fresh = d.agents.find(a => a.agentId === selectedAgent.agentId);
+                if (fresh) setSelAgent(fresh);
+              }
+            } catch {}
+          };
+          poll();
+          const t = setInterval(poll, 8000);
+          return () => clearInterval(t);
+        }, [selectedAgent?.agentId]);
+
+        const sendCmd = async (agentId, action, extra={}) => {
+          setAgentLoading(true);
+          try {
+            const r = await fetch('/api/sentinel/command', {
+              method:'POST', headers:{'Content-Type':'application/json'},
+              body: JSON.stringify({ agentId, action, ...extra }),
+            });
+            const d = await r.json();
+            showToast(`⚡ Command "${action}" queued for ${agentId}`, D.orange);
+            setCmdResult(d);
+          } catch { showToast('Failed to send command', D.red); }
+          setAgentLoading(false);
+        };
+
+        const agents = agentData.agents || [];
+        const agent  = selectedAgent;
+
+        return (
+          <div style={{ animation:'fade-in 0.3s ease' }}>
+            <h2 style={{ fontSize:20, fontWeight:900, color:D.white, marginBottom:4 }}>🖥️ Sentinel Agents</h2>
+            <p style={{ fontSize:12, color:D.muted, marginBottom:20 }}>Live view of all LeoNet Sentinel agents · Real device data · Send mitigations remotely</p>
+
+            {/* Stats bar */}
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:14, marginBottom:20 }}>
+              <GlowCard color={D.cyan} style={{ padding:'16px 20px' }}>
+                <div style={{ fontSize:10, color:D.muted, textTransform:'uppercase', letterSpacing:1.5, marginBottom:6 }}>Total Agents</div>
+                <div style={{ fontSize:30, fontWeight:900, color:D.cyan, fontFamily:'monospace' }}>{agentData.total}</div>
+              </GlowCard>
+              <GlowCard color={D.green} style={{ padding:'16px 20px' }}>
+                <div style={{ fontSize:10, color:D.muted, textTransform:'uppercase', letterSpacing:1.5, marginBottom:6 }}>Online Now</div>
+                <div style={{ fontSize:30, fontWeight:900, color:D.green, fontFamily:'monospace' }}>{agentData.online}</div>
+              </GlowCard>
+              <GlowCard color={D.red} style={{ padding:'16px 20px' }}>
+                <div style={{ fontSize:10, color:D.muted, textTransform:'uppercase', letterSpacing:1.5, marginBottom:6 }}>Total Threats</div>
+                <div style={{ fontSize:30, fontWeight:900, color:D.red, fontFamily:'monospace' }}>{agents.reduce((s,a)=>s+(a.threatCount||0),0)}</div>
+              </GlowCard>
+              <GlowCard color={D.orange} style={{ padding:'16px 20px' }}>
+                <div style={{ fontSize:10, color:D.muted, textTransform:'uppercase', letterSpacing:1.5, marginBottom:6 }}>Critical Alerts</div>
+                <div style={{ fontSize:30, fontWeight:900, color:D.orange, fontFamily:'monospace' }}>{agents.reduce((s,a)=>s+(a.criticalCount||0),0)}</div>
+              </GlowCard>
+            </div>
+
+            {agents.length === 0 ? (
+              <GlowCard color={D.muted} style={{ padding:60, textAlign:'center' }}>
+                <div style={{ fontSize:40, marginBottom:16 }}>🖥️</div>
+                <div style={{ fontSize:16, fontWeight:700, color:D.white, marginBottom:8 }}>No Agents Connected Yet</div>
+                <div style={{ fontSize:12, color:D.muted, lineHeight:1.8 }}>
+                  Install LeoNet Sentinel on client devices.<br/>
+                  Configure <code style={{ color:D.cyan }}>LEONET_URL=https://leonet-defense.vercel.app</code><br/>
+                  or enter this URL in Sentinel's Settings tab.
+                </div>
+              </GlowCard>
+            ) : (
+              <div style={{ display:'grid', gridTemplateColumns: agent ? '280px 1fr' : '1fr', gap:18 }}>
+                {/* Agent list */}
+                <div>
+                  {agents.map(a => (
+                    <GlowCard key={a.agentId} color={a.online?D.green:D.muted} onClick={()=>setSelAgent(a)}
+                      style={{ padding:18, marginBottom:10, cursor:'pointer', border:`1px solid ${selectedAgent?.agentId===a.agentId?D.cyan:a.online?D.green+'44':D.border}` }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
+                        <div style={{ fontSize:13, fontWeight:800, color:D.white }}>{a.agentName||a.agentId}</div>
+                        <div style={{ display:'flex', alignItems:'center', gap:5 }}>
+                          <div style={{ width:7, height:7, borderRadius:'50%', background: a.online?D.green:D.muted, animation: a.online?'pulse-glow 2s infinite':'none' }} />
+                          <span style={{ fontSize:9, fontWeight:800, color: a.online?D.green:D.muted }}>{a.online?'ONLINE':'OFFLINE'}</span>
+                        </div>
+                      </div>
+                      <div style={{ fontSize:10, color:D.muted, fontFamily:'monospace', marginBottom:6 }}>{a.hostname} · {a.platform}</div>
+                      <div style={{ display:'flex', gap:8 }}>
+                        <span style={{ fontSize:9, fontWeight:800, color:D.red, background:'rgba(255,45,85,0.12)', border:`1px solid ${D.red}33`, borderRadius:8, padding:'2px 8px' }}>{a.criticalCount||0} critical</span>
+                        <span style={{ fontSize:9, fontWeight:800, color:D.orange, background:'rgba(255,107,53,0.12)', border:`1px solid ${D.orange}33`, borderRadius:8, padding:'2px 8px' }}>{a.threatCount||0} threats</span>
+                      </div>
+                      <div style={{ fontSize:9, color:D.muted, marginTop:6 }}>Last seen: {a.lastSeen ? new Date(a.lastSeen).toLocaleTimeString() : '—'}</div>
+                    </GlowCard>
+                  ))}
+                </div>
+
+                {/* Agent detail */}
+                {agent && (
+                  <div>
+                    <GlowCard color={D.cyan} style={{ padding:24, marginBottom:16 }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+                        <div>
+                          <div style={{ fontSize:16, fontWeight:900, color:D.white }}>{agent.agentName||agent.agentId}</div>
+                          <div style={{ fontSize:11, color:D.muted, marginTop:2 }}>{agent.hostname} · {agent.platform} · {agent.agentId}</div>
+                        </div>
+                        <button onClick={()=>setSelAgent(null)} style={{ background:'none', border:`1px solid ${D.border}`, borderRadius:6, color:D.muted, padding:'5px 10px', cursor:'pointer', fontSize:11 }}>✕ Close</button>
+                      </div>
+
+                      {/* System stats */}
+                      {agent.system && (
+                        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:10, marginBottom:16 }}>
+                          {[
+                            ['CPU',    `${agent.system.cpuPct||0}%`,  agent.system.cpuPct>80?D.red:D.cyan],
+                            ['Memory', `${agent.system.memPct||0}%`,  agent.system.memPct>85?D.red:D.cyan],
+                            ['Uptime', `${Math.floor((agent.system.uptime||0)/3600)}h`, D.purple],
+                            ['CPUs',   `${agent.system.cpuCount||0}`, D.gold],
+                          ].map(([l,v,c])=>(
+                            <div key={l} style={{ padding:'10px 14px', background:'#081420', borderRadius:8, textAlign:'center' }}>
+                              <div style={{ fontSize:9, color:D.muted, textTransform:'uppercase', letterSpacing:1, marginBottom:4 }}>{l}</div>
+                              <div style={{ fontSize:20, fontWeight:900, color:c, fontFamily:'monospace' }}>{v}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Remote command panel */}
+                      <div style={{ padding:'16px 18px', background:'rgba(26,122,255,0.08)', border:`1px solid ${D.blue}33`, borderRadius:10, marginBottom:14 }}>
+                        <div style={{ fontSize:11, fontWeight:800, color:D.white, marginBottom:12 }}>⚡ Remote Commands</div>
+                        <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
+                          {[
+                            { label:'🔬 Scan Now',       action:'scan_now'        },
+                            { label:'🔄 Refresh Data',   action:'scan_now'        },
+                            { label:'🌐 Isolate Network',action:'isolate_network' },
+                          ].map(({ label, action }) => (
+                            <button key={action} disabled={agentLoading}
+                              onClick={() => {
+                                if (action==='isolate_network' && !window.confirm(`Isolate ${agent.agentName}? This disables all network interfaces on the device.`)) return;
+                                sendCmd(agent.agentId, action);
+                              }}
+                              style={{ padding:'8px 14px', borderRadius:8, border:`1px solid ${action==='isolate_network'?D.red:D.cyan}44`, background: action==='isolate_network'?'rgba(255,45,85,0.1)':'rgba(0,212,255,0.08)', color: action==='isolate_network'?D.red:D.cyan, fontWeight:700, fontSize:11, cursor:'pointer', opacity: agentLoading?0.6:1 }}>
+                              {label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </GlowCard>
+
+                    {/* Threats on this agent */}
+                    <GlowCard color={D.red} style={{ padding:24, marginBottom:16 }}>
+                      <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:14 }}>🎯 Threats on {agent.agentName} ({(agent.threats||[]).length})</div>
+                      {(agent.threats||[]).length === 0
+                        ? <div style={{ color:D.green, fontSize:12 }}>✅ No active threats on this device</div>
+                        : (agent.threats||[]).map(t => (
+                          <div key={t.id} style={{ padding:'12px 14px', background:t.severity==='critical'?'rgba(255,45,85,0.1)':'rgba(255,107,53,0.08)', border:`1px solid ${sevColor(t.severity)}33`, borderRadius:8, marginBottom:8 }}>
+                            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:4 }}>
+                              <span style={{ fontSize:11, fontWeight:700, color:sevColor(t.severity) }}>{t.type}</span>
+                              <span style={{ fontSize:9, fontWeight:800, color:sevColor(t.severity), textTransform:'uppercase' }}>{t.severity}</span>
+                            </div>
+                            <div style={{ fontSize:11, color:D.text, marginBottom:4 }}>{t.name}</div>
+                            <div style={{ fontSize:9, color:D.muted, marginBottom:8 }}>{t.details}</div>
+                            {t.action && (
+                              <button onClick={() => sendCmd(agent.agentId, t.action.action, { pid:t.action.pid, ip:t.action.ip, label:t.action.label })}
+                                style={{ padding:'6px 14px', borderRadius:6, border:'none', background:sevColor(t.severity), color:'#fff', fontWeight:800, fontSize:10, cursor:'pointer' }}>
+                                ⚡ {t.action.label}
+                              </button>
+                            )}
+                          </div>
+                        ))
+                      }
+                    </GlowCard>
+
+                    {/* Mitigation log */}
+                    {(agent.mitigations||[]).length > 0 && (
+                      <GlowCard color={D.green} style={{ padding:24 }}>
+                        <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:14 }}>🛡️ Mitigation Log</div>
+                        {(agent.mitigations||[]).slice(0,5).map((m,i) => (
+                          <div key={i} style={{ display:'flex', gap:12, padding:'10px 12px', background: m.success?'rgba(0,255,136,0.06)':'rgba(255,107,53,0.06)', borderRadius:8, marginBottom:6, border:`1px solid ${m.success?D.green:D.orange}22` }}>
+                            <span>{m.success?'✅':'⚠️'}</span>
+                            <div>
+                              <div style={{ fontSize:10, fontWeight:700, color:m.success?D.green:D.orange }}>{(m.action||'').replace(/_/g,' ').toUpperCase()}</div>
+                              <div style={{ fontSize:10, color:D.text, marginTop:2 }}>{m.output}</div>
+                              <div style={{ fontSize:9, color:D.muted, marginTop:2 }}>{m.executedAt ? new Date(m.executedAt).toLocaleString() : ''}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </GlowCard>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      }
 
       // ── CERTIFICATION ROADMAP ──────────────────────────────────────────────
       case 'cert-roadmap': {
