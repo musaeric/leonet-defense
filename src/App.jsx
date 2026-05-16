@@ -82,6 +82,53 @@ const TRAINING_MODULES = [
   { id:'T5', title:'Incident Response Drill',    xp:3000, level:'Expert',       complete:false, badge:'🏆' },
 ];
 
+const CERT_FRAMEWORKS = [
+  { id:'soc2', name:'SOC 2 Type II', icon:'🔐', color:'#1A7AFF', issuer:'AICPA', readiness:81,
+    domains:[
+      { name:'Security (CC)', controls:['CC1 – Control Environment','CC2 – Communication & Info','CC3 – Risk Assessment','CC4 – Monitoring Activities','CC5 – Control Activities','CC6 – Logical Access Controls','CC7 – System Operations','CC8 – Change Management','CC9 – Risk Mitigation'], status:['pass','pass','pass','pass','pass','gap','pass','partial','pass'] },
+      { name:'Availability (A)', controls:['A1.1 – Availability Policy','A1.2 – Recovery Testing','A1.3 – Capacity Planning'], status:['pass','partial','pass'] },
+      { name:'Confidentiality (C)', controls:['C1.1 – Confidentiality Policy','C1.2 – Data Disposal Procedures'], status:['pass','gap'] },
+      { name:'Privacy (P)', controls:['P1 – Notice & Consent','P2 – Choice & Consent','P3 – Data Collection','P4 – Use & Retention','P5 – Subject Access','P6 – Disclosure Controls'], status:['pass','pass','partial','pass','gap','pass'] },
+    ]},
+  { id:'iso27001', name:'ISO 27001:2022', icon:'🌐', color:'#00D4FF', issuer:'ISO/IEC', readiness:88,
+    domains:[
+      { name:'Organizational Controls (A.5)', controls:['IS Policies & Governance','Roles & Responsibilities','Threat Intelligence Program','IS in Project Management','Intellectual Property Controls','Asset Inventory & Management'], status:['pass','pass','pass','partial','pass','pass'] },
+      { name:'People Controls (A.6)', controls:['Staff Screening Process','Security Awareness Training','Disciplinary Process','Teleworking Policy'], status:['pass','pass','pass','partial'] },
+      { name:'Physical Controls (A.7)', controls:['Physical Security Perimeters','Physical Entry Controls','Secure Office & Screen Policy','Equipment Maintenance'], status:['pass','pass','gap','pass'] },
+      { name:'Tech Controls (A.8)', controls:['User Endpoint Devices','Privileged Access Rights','Malware Protection','Network Monitoring','Vulnerability Management','Application Security','Cryptography Policy'], status:['pass','pass','pass','pass','partial','pass','pass'] },
+    ]},
+  { id:'hipaa', name:'HIPAA Security Rule', icon:'🏥', color:'#00FF88', issuer:'HHS / OCR', readiness:85,
+    domains:[
+      { name:'Administrative Safeguards', controls:['Security Officer Designated','Workforce Security Training','Access Management Procedures','Contingency / BCP Plan','Audit Controls Policy'], status:['pass','pass','partial','pass','pass'] },
+      { name:'Physical Safeguards', controls:['Facility Access Controls','Workstation Use Policy','Device & Media Controls'], status:['pass','pass','gap'] },
+      { name:'Technical Safeguards', controls:['Unique User IDs Required','Automatic Logoff Configured','ePHI Encryption in Transit','Audit Logs & Monitoring','Data Integrity Controls'], status:['pass','pass','pass','pass','partial'] },
+      { name:'Breach Notification Rule', controls:['Breach Response Plan Documented','60-Day Notification SLA','HHS Reporting Process'], status:['pass','partial','pass'] },
+    ]},
+  { id:'gdpr', name:'GDPR', icon:'🇪🇺', color:'#BF5FFF', issuer:'EU Commission', readiness:78,
+    domains:[
+      { name:'Data Subject Rights (Art. 12-22)', controls:['Right to Access Implemented','Right to Erasure Process','Data Portability Mechanism','Objection Handling Workflow'], status:['pass','pass','partial','pass'] },
+      { name:'Controller Obligations (Art. 24-39)', controls:['DPIA Process Established','DPO Appointed','Records of Processing Activities','Privacy by Design Embedded'], status:['pass','gap','pass','partial'] },
+      { name:'Security (Art. 32)', controls:['Encryption Standards Applied','Access Controls Enforced','Regular Security Testing','Incident Response Plan'], status:['pass','pass','pass','pass'] },
+      { name:'Breach Notification (Art. 33-34)', controls:['72-Hour SA Notification','Individual Notification Process','Breach Documentation Register'], status:['pass','pass','pass'] },
+    ]},
+  { id:'cmmc', name:'CMMC Level 2', icon:'🛡️', color:'#FF6B35', issuer:'DoD / DIB', readiness:77,
+    domains:[
+      { name:'Access Control (AC)', controls:['Limit System Access to Authorized Users','Control Remote Access Methods','Employ Least-Privilege Principle','Separate Duties of Individuals'], status:['pass','pass','partial','pass'] },
+      { name:'Audit & Accountability (AU)', controls:['Audit Log Coverage & Retention','Protect Audit Information','Review & Analyze Audit Logs'], status:['pass','pass','partial'] },
+      { name:'Incident Response (IR)', controls:['Incident Response Plan in Place','Track & Document Incidents','Test Incident Response Plan'], status:['pass','pass','gap'] },
+      { name:'System & Comm. Protection (SC)', controls:['Boundary Protection Implemented','CUI Encryption at Rest & Transit','Network Segmentation Applied'], status:['pass','pass','pass'] },
+    ]},
+  { id:'pci', name:'PCI DSS v4.0', icon:'💳', color:'#FFD700', issuer:'PCI SSC', readiness:80,
+    domains:[
+      { name:'Network Security (Req 1-2)', controls:['Firewall Configuration Documented','No Vendor Default Credentials','Network Architecture Diagram'], status:['pass','pass','partial'] },
+      { name:'Cardholder Data (Req 3-4)', controls:['Data Retention Policy Enforced','Encryption in Transit (TLS 1.2+)','Cryptographic Key Management'], status:['pass','pass','partial'] },
+      { name:'Vulnerability Mgmt (Req 5-6)', controls:['Anti-Malware on All Systems','Patch Management Process','Secure Development Lifecycle'], status:['pass','partial','pass'] },
+      { name:'Access Control (Req 7-9)', controls:['Need-to-Know Access Enforced','Unique User IDs Assigned','Physical Security for CDE'], status:['pass','pass','gap'] },
+      { name:'Monitoring & Testing (Req 10-11)', controls:['Log All Access to CDE','Track & Monitor Networks','Regular Penetration Testing'], status:['pass','pass','pass'] },
+      { name:'IS Policy (Req 12)', controls:['Security Policy Published','Risk Assessment Conducted','Incident Response Plan Tested'], status:['pass','partial','pass'] },
+    ]},
+];
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const sevColor = (s) => ({ critical:D.critical, high:D.high, medium:D.medium, low:D.low, safe:D.safe }[s] || D.muted);
 const sevBg    = (s) => ({ critical:'rgba(255,45,85,0.15)', high:'rgba(255,107,53,0.15)', medium:'rgba(255,215,0,0.12)', low:'rgba(0,212,255,0.12)', safe:'rgba(0,255,136,0.12)' }[s] || 'transparent');
@@ -425,6 +472,342 @@ function ComplianceBadge({ name, status, icon }) {
   );
 }
 
+// ── Deception Shield ─────────────────────────────────────────────────────────
+const LURES = [
+  { id:'L1', name:'Admin Portal Honeypot',   type:'Web App',         ip:'10.0.0.240', port:8443, icon:'🌐', engaged:true,  captures:14, neutralized:14 },
+  { id:'L2', name:'Fake Credential Store',   type:'Database',        ip:'10.0.0.241', port:5432, icon:'🗄️', engaged:true,  captures:8,  neutralized:8  },
+  { id:'L3', name:'Ghost File Server',        type:'SMB Share',       ip:'10.0.0.242', port:445,  icon:'📁', engaged:false, captures:3,  neutralized:3  },
+  { id:'L4', name:'Phantom API Gateway',      type:'API Endpoint',    ip:'10.0.0.243', port:3000, icon:'🔌', engaged:true,  captures:22, neutralized:22 },
+  { id:'L5', name:'Decoy SMTP Relay',         type:'Email Server',    ip:'10.0.0.244', port:25,   icon:'✉️', engaged:false, captures:6,  neutralized:6  },
+  { id:'L6', name:'Fake SSH Bastion',         type:'SSH Server',      ip:'10.0.0.245', port:22,   icon:'🔐', engaged:true,  captures:31, neutralized:31 },
+  { id:'L7', name:'Breadcrumb PDF Leaker',    type:'Canary Document', ip:'—',          port:0,    icon:'📄', engaged:false, captures:1,  neutralized:1  },
+  { id:'L8', name:'Mimic Domain Controller',  type:'Active Directory',ip:'10.0.0.246', port:389,  icon:'🏛️', engaged:true,  captures:9,  neutralized:9  },
+];
+
+const CAPTURED = [
+  { id:'C001', actor:'185.220.101.42',  technique:'SSH brute-force + credential stuffing',  lure:'Fake SSH Bastion',       time:'08:33:12', ttk:'0.4s', verdict:'Neutralized', profile:'Automated scanner — Mirai variant' },
+  { id:'C002', actor:'91.108.4.200',   technique:'SQL injection probe',                     lure:'Fake Credential Store',  time:'08:28:44', ttk:'0.2s', verdict:'Neutralized', profile:'APT-style recon tool' },
+  { id:'C003', actor:'45.142.212.100', technique:'API key enumeration + data exfil attempt',lure:'Phantom API Gateway',    time:'08:21:00', ttk:'0.7s', verdict:'Neutralized', profile:'Custom script — nation-state IOC match' },
+  { id:'C004', actor:'194.165.16.72',  technique:'Admin panel login spray',                 lure:'Admin Portal Honeypot',  time:'08:14:33', ttk:'0.3s', verdict:'Neutralized', profile:'Credential stuffing bot — leaked list' },
+  { id:'C005', actor:'193.32.162.10',  technique:'LDAP enumeration + lateral move attempt', lure:'Mimic Domain Controller',time:'08:09:11', ttk:'1.1s', verdict:'Neutralized', profile:'Operator-driven — likely APT recon' },
+  { id:'C006', actor:'82.221.105.6',   technique:'Document opened — beacon triggered',      lure:'Breadcrumb PDF Leaker',  time:'07:52:00', ttk:'—',    verdict:'Tracked',      profile:'Internal leak confirmed — endpoint 192.168.1.55' },
+];
+
+function MagnetCanvas({ tick, active }) {
+  const particles = useRef([]);
+  const frameRef  = useRef(null);
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width; const H = canvas.height;
+    const cx = W / 2; const cy = H / 2;
+
+    if (!active) { ctx.clearRect(0, 0, W, H); return; }
+
+    // Spawn new threat particle
+    if (Math.random() < 0.06) {
+      const angle = Math.random() * Math.PI * 2;
+      const r = 150 + Math.random() * 60;
+      particles.current.push({
+        x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle),
+        size: 3 + Math.random() * 4,
+        color: ['#FF2D55','#FF6B35','#BF5FFF','#FFD700'][Math.floor(Math.random()*4)],
+        speed: 0.018 + Math.random() * 0.022,
+        progress: 0,
+        angle,
+      });
+    }
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Draw pull rings
+    for (let ring = 1; ring <= 4; ring++) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, ring * 38, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(0,212,255,${0.04 + ring * 0.015})`;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 8]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Draw spiral field lines
+    for (let a = 0; a < Math.PI * 2; a += Math.PI / 4) {
+      ctx.beginPath();
+      for (let d = 30; d < 160; d += 4) {
+        const spiralA = a + d * 0.04 + tick * 0.02;
+        const px = cx + d * Math.cos(spiralA);
+        const py = cy + d * Math.sin(spiralA);
+        if (d === 30) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.strokeStyle = 'rgba(0,212,255,0.07)';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+
+    // Draw magnet core
+    const grad = ctx.createRadialGradient(cx, cy, 2, cx, cy, 28);
+    grad.addColorStop(0, 'rgba(0,212,255,0.9)');
+    grad.addColorStop(0.5, 'rgba(26,122,255,0.6)');
+    grad.addColorStop(1, 'rgba(0,212,255,0)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, 28, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+    ctx.fillStyle = '#00D4FF';
+    ctx.shadowColor = '#00D4FF';
+    ctx.shadowBlur = 20;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    ctx.fillStyle = '#050A14';
+    ctx.font = 'bold 14px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🧲', cx, cy);
+
+    // Animate particles toward center
+    particles.current = particles.current.filter(p => {
+      p.progress = Math.min(1, p.progress + p.speed);
+      const ease = 1 - Math.pow(1 - p.progress, 3);
+      const px = p.x + (cx - p.x) * ease;
+      const py = p.y + (cy - p.y) * ease;
+      const sz = p.size * (1 - ease * 0.7);
+
+      ctx.beginPath();
+      ctx.arc(px, py, sz, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 8;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      if (p.progress >= 1) {
+        // Flash on neutralize
+        ctx.beginPath();
+        ctx.arc(cx, cy, 20 + (p.progress - 1) * 60, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(0,255,136,${0.6 - (p.progress-1)*0.6})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        return false;
+      }
+      return true;
+    });
+
+    frameRef.current = requestAnimationFrame(() => {});
+  }, [tick, active]);
+
+  return (
+    <canvas ref={canvasRef} width={380} height={380}
+      style={{ display:'block', margin:'0 auto', borderRadius:'50%',
+        background:'radial-gradient(circle at center, #0A1828 0%, #050A14 100%)',
+        boxShadow:'0 0 60px rgba(0,212,255,0.15), inset 0 0 60px rgba(0,0,0,0.5)' }} />
+  );
+}
+
+function DeceptionShield({ showToast, tick }) {
+  const [lures, setLures]         = useState(LURES.map(l=>({...l})));
+  const [magnetOn, setMagnetOn]   = useState(true);
+  const [captured, setCaptured]   = useState(CAPTURED.map(c=>({...c})));
+  const [totalNeutralized, setTN] = useState(94);
+  const [selected, setSelected]   = useState(null);
+  const [deploying, setDeploying] = useState(null);
+
+  const activeLures   = lures.filter(l => l.engaged).length;
+  const totalCaptures = lures.reduce((s,l) => s + l.captures, 0);
+
+  const toggleLure = (id) => {
+    setLures(prev => prev.map(l => l.id===id ? {...l, engaged:!l.engaged} : l));
+    const lure = lures.find(l => l.id===id);
+    showToast(lure.engaged ? `🔕 Lure deactivated: ${lure.name}` : `🧲 Lure armed: ${lure.name}`, lure.engaged ? D.orange : D.cyan);
+  };
+
+  const deployAll = () => {
+    setDeploying('all');
+    setTimeout(() => {
+      setLures(prev => prev.map(l => ({...l, engaged:true})));
+      setDeploying(null);
+      showToast('🧲 All 8 honeypot lures armed and broadcasting. Magnetic field active.', D.cyan);
+    }, 1800);
+  };
+
+  const simulateCapture = () => {
+    const ips = ['197.33.14.88','78.141.200.44','45.33.105.21','109.248.10.5'];
+    const techniques = ['Zero-day probe on fake login page','Ransomware deployment attempt','Supply chain package injection','Credential stuffing via dark web list'];
+    const lureNames = lures.filter(l=>l.engaged).map(l=>l.name);
+    const newCapture = {
+      id:`C${String(captured.length+1).padStart(3,'0')}`,
+      actor: ips[Math.floor(Math.random()*ips.length)],
+      technique: techniques[Math.floor(Math.random()*techniques.length)],
+      lure: lureNames[Math.floor(Math.random()*lureNames.length)] || 'Admin Portal Honeypot',
+      time: new Date().toTimeString().slice(0,8),
+      ttk: `${(Math.random()*1.5+0.1).toFixed(1)}s`,
+      verdict: 'Neutralized',
+      profile: 'Active threat — pulled into sandbox and neutralized',
+    };
+    setCaptured(prev => [newCapture, ...prev]);
+    setTN(p => p+1);
+    showToast(`⚡ Threat captured and neutralized in sandbox — ${newCapture.actor}`, D.green);
+  };
+
+  return (
+    <div style={{ animation:'fade-in 0.3s ease' }}>
+      <div style={{ marginBottom:20 }}>
+        <h2 style={{ fontSize:20, fontWeight:900, color:D.white, margin:'0 0 4px' }}>🧲 Deception Shield</h2>
+        <p style={{ fontSize:12, color:D.muted }}>
+          When you fight corruption, corruption fights back — this shield turns every attack into a trap.
+          Honeypot lures act as a magnet, drawing threats into an isolated sandbox where they are profiled and neutralized.
+        </p>
+      </div>
+
+      {/* Stat row */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:12, marginBottom:22 }}>
+        {[
+          ['Threats Neutralized', totalNeutralized, D.green,  '🧲'],
+          ['Active Lures',        activeLures,       D.cyan,   '🪤'],
+          ['Total Captures',      totalCaptures,     D.orange, '🕸️'],
+          ['Sandbox Capacity',    '∞',               D.purple, '🏖️'],
+          ['Avg Time-to-Kill',    '0.5s',            D.blue,   '⚡'],
+          ['Magnet Field',        magnetOn?'ON':'OFF',magnetOn?D.green:D.red,'📡'],
+        ].map(([l,v,c,i])=>(
+          <GlowCard key={l} color={c} style={{ padding:'14px 18px' }}>
+            <div style={{ fontSize:10, color:D.muted, textTransform:'uppercase', letterSpacing:1, marginBottom:6 }}>{l}</div>
+            <div style={{ fontSize:24, fontWeight:900, color:c, fontFamily:'monospace', display:'flex', alignItems:'center', gap:8 }}>
+              {v}<span style={{ fontSize:18 }}>{i}</span>
+            </div>
+          </GlowCard>
+        ))}
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'420px minmax(0,1fr)', gap:20, marginBottom:20, alignItems:'start' }}>
+        {/* Magnet visualizer */}
+        <GlowCard color={magnetOn ? D.cyan : D.border} style={{ padding:24 }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:18 }}>
+            <div>
+              <div style={{ fontSize:13, fontWeight:800, color:D.white }}>🧲 Magnetic Sandbox Field</div>
+              <div style={{ fontSize:11, color:D.muted, marginTop:2 }}>Threats are drawn in, analysed, and destroyed</div>
+            </div>
+            <button onClick={()=>{ setMagnetOn(p=>!p); showToast(magnetOn?'📡 Magnetic field deactivated':'🧲 Magnetic field armed — threats will be pulled in.',magnetOn?D.orange:D.cyan); }}
+              style={{ background: magnetOn?`linear-gradient(135deg,${D.cyan},${D.blue})`:'rgba(255,255,255,0.05)', border:`1px solid ${magnetOn?D.cyan:D.border}`, borderRadius:8, padding:'7px 16px', color: magnetOn?'#000':D.muted, fontSize:11, fontWeight:800, cursor:'pointer' }}>
+              {magnetOn ? '● ARMED' : '○ OFFLINE'}
+            </button>
+          </div>
+
+          <MagnetCanvas tick={tick} active={magnetOn} />
+
+          <div style={{ marginTop:18, display:'flex', gap:10 }}>
+            <button onClick={simulateCapture} disabled={!magnetOn}
+              style={{ flex:2, padding:'11px', borderRadius:8, border:'none', background: magnetOn?`linear-gradient(135deg,${D.red},${D.orange})`:'#112233', color: magnetOn?'#fff':D.muted, fontWeight:800, fontSize:12, cursor: magnetOn?'pointer':'not-allowed' }}>
+              ⚡ Simulate Incoming Attack
+            </button>
+            <button onClick={deployAll} disabled={deploying==='all'}
+              style={{ flex:1, padding:'11px', borderRadius:8, border:`1px solid ${D.cyan}44`, background:'rgba(0,212,255,0.08)', color:D.cyan, fontWeight:700, fontSize:12, cursor:'pointer' }}>
+              {deploying==='all' ? '⏳ Arming…' : '🪤 Arm All'}
+            </button>
+          </div>
+        </GlowCard>
+
+        {/* Honeypot lure grid */}
+        <GlowCard color={D.orange} style={{ padding:24 }}>
+          <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:4 }}>🪤 Honeypot Lure Network</div>
+          <div style={{ fontSize:11, color:D.muted, marginBottom:16 }}>Decoy assets broadcasting across your attack surface — irresistible to any intruder</div>
+          <div style={{ display:'grid', gap:10 }}>
+            {lures.map(l => (
+              <div key={l.id} style={{ display:'flex', gap:12, alignItems:'center', padding:'12px 16px', background: l.engaged?'rgba(0,212,255,0.05)':'#081420', borderRadius:10, border:`1px solid ${l.engaged?D.cyan:D.border}44`, cursor:'pointer', transition:'all 0.2s', animation: l.engaged?'lure-ping 2.5s ease-in-out infinite':undefined }}
+                onClick={()=>setSelected(selected?.id===l.id?null:l)}>
+                <div style={{ width:36, height:36, borderRadius:10, background: l.engaged?`rgba(0,212,255,0.15)`:'rgba(255,255,255,0.04)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, flexShrink:0, border:`1px solid ${l.engaged?D.cyan:D.border}33` }}>{l.icon}</div>
+                <div style={{ flex:1, minWidth:0 }}>
+                  <div style={{ fontSize:12, fontWeight:700, color:l.engaged?D.white:D.muted }}>{l.name}</div>
+                  <div style={{ fontSize:10, color:D.muted, marginTop:2 }}>{l.type}{l.port>0?` · :${l.port}`:''} · {l.captures} captured</div>
+                </div>
+                <div style={{ display:'flex', flexDirection:'column', alignItems:'flex-end', gap:6, flexShrink:0 }}>
+                  <span style={{ fontSize:9, fontWeight:800, color:l.engaged?D.green:D.muted, textTransform:'uppercase', letterSpacing:1 }}>{l.engaged?'● LIVE':'○ OFF'}</span>
+                  <button onClick={e=>{e.stopPropagation();toggleLure(l.id);}} style={{ background:'none', border:`1px solid ${l.engaged?D.red:D.cyan}44`, borderRadius:6, color:l.engaged?D.red:D.cyan, padding:'3px 10px', fontSize:10, fontWeight:800, cursor:'pointer' }}>
+                    {l.engaged?'Disarm':'Arm'}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </GlowCard>
+      </div>
+
+      {/* Lure detail expand */}
+      {selected && (
+        <GlowCard color={D.cyan} style={{ padding:22, marginBottom:20, animation:'slide-in-right 0.2s ease' }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
+            <div style={{ fontSize:13, fontWeight:800, color:D.white }}>{selected.icon} {selected.name} — Lure Analysis</div>
+            <button onClick={()=>setSelected(null)} style={{ background:'none', border:`1px solid ${D.border}`, borderRadius:6, color:D.muted, padding:'4px 10px', fontSize:11, cursor:'pointer' }}>✕</button>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:12 }}>
+            {[
+              ['Type',l=>l.type,D.cyan],['IP Address',l=>l.ip||'—',D.muted],['Port',l=>l.port||'—',D.muted],
+              ['Status',l=>l.engaged?'LIVE':'OFFLINE',l=>l.engaged?D.green:D.red],
+              ['Total Captures',l=>l.captures,D.orange],['Neutralized',l=>l.neutralized,D.green],
+            ].map(([label,val,col])=>(
+              <div key={label} style={{ background:'#081420', borderRadius:8, padding:'12px 14px' }}>
+                <div style={{ fontSize:10, color:D.muted, marginBottom:4 }}>{label}</div>
+                <div style={{ fontSize:14, fontWeight:800, color:typeof col==='function'?col(selected):col, fontFamily:'monospace' }}>{typeof val==='function'?val(selected):val}</div>
+              </div>
+            ))}
+          </div>
+        </GlowCard>
+      )}
+
+      {/* Capture log */}
+      <GlowCard color={D.green} style={{ padding:24 }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+          <div>
+            <div style={{ fontSize:13, fontWeight:800, color:D.white }}>🕸️ Sandbox Capture Log</div>
+            <div style={{ fontSize:11, color:D.muted, marginTop:2 }}>Every attacker that touched a lure was pulled into the sandbox and neutralized</div>
+          </div>
+          <div style={{ fontSize:11, color:D.green, fontWeight:700 }}>{captured.length} captures · 100% neutralization rate</div>
+        </div>
+        <div style={{ overflowX:'auto' }}>
+          <table style={{ width:'100%', borderCollapse:'collapse', fontSize:11 }}>
+            <thead><tr style={{ background:'#061428' }}>{['Time','Attacker IP','Technique','Lure Triggered','TTK','Verdict','Threat Profile'].map(h=>(
+              <th key={h} style={{ padding:'9px 12px', textAlign:'left', color:D.muted, fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:1, borderBottom:`1px solid ${D.border}` }}>{h}</th>
+            ))}</tr></thead>
+            <tbody>{captured.map((c,i)=>(
+              <tr key={c.id} style={{ background: i===0?'rgba(0,255,136,0.05)':i%2===0?'#081420':'#0A1828', borderBottom:`1px solid ${D.border2}`, animation:i===0?'captured-flash 1.5s ease-in-out 2':undefined }}>
+                <td style={{ padding:'10px 12px', fontFamily:'monospace', color:D.muted, fontSize:10 }}>{c.time}</td>
+                <td style={{ padding:'10px 12px', color:D.red, fontFamily:'monospace', fontWeight:700 }}>{c.actor}</td>
+                <td style={{ padding:'10px 12px', color:D.text }}>{c.technique}</td>
+                <td style={{ padding:'10px 12px', color:D.cyan, fontWeight:600 }}>{c.lure}</td>
+                <td style={{ padding:'10px 12px', color:D.gold, fontFamily:'monospace', fontWeight:800 }}>{c.ttk}</td>
+                <td style={{ padding:'10px 12px' }}>
+                  <span style={{ color:c.verdict==='Neutralized'?D.green:D.orange, fontWeight:800, fontSize:10, background:c.verdict==='Neutralized'?'rgba(0,255,136,0.12)':'rgba(255,215,0,0.12)', border:`1px solid ${c.verdict==='Neutralized'?D.green:D.orange}33`, borderRadius:10, padding:'2px 8px' }}>{c.verdict}</span>
+                </td>
+                <td style={{ padding:'10px 12px', color:D.muted, fontSize:10 }}>{c.profile}</td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
+
+        <div style={{ marginTop:18, padding:'14px 18px', background:'rgba(0,255,136,0.04)', border:`1px solid ${D.green}22`, borderRadius:10, display:'flex', gap:14, alignItems:'flex-start' }}>
+          <div style={{ fontSize:24, flexShrink:0 }}>🛡️</div>
+          <div>
+            <div style={{ fontSize:12, fontWeight:800, color:D.green, marginBottom:4 }}>How the Deception Shield protects you</div>
+            <div style={{ fontSize:11, color:D.muted, lineHeight:1.8 }}>
+              When you do work that challenges powerful interests, retaliation comes as cyberattacks.
+              Rather than just blocking them, this shield <strong style={{ color:D.white }}>lures every attacker into a fake environment</strong> they believe is real.
+              They waste their tools and reveal their techniques — we profile them, neutralize their payload,
+              and <strong style={{ color:D.white }}>feed their TTPs back into the defense engine</strong> to make every attack make us stronger.
+              The magnet never sleeps. The sandbox never fills.
+            </div>
+          </div>
+        </div>
+      </GlowCard>
+    </div>
+  );
+}
+
 // ── Main App ─────────────────────────────────────────────────────────────────
 const NAV = [
   { id:'dashboard',      label:'Dashboard',        icon:'⚡' },
@@ -432,6 +815,7 @@ const NAV = [
   { id:'scan',           label:'Deep Scan',        icon:'🔬' },
   { id:'network',        label:'Network Shield',   icon:'🌐' },
   { id:'memory',         label:'Memory Lab',       icon:'🧠' },
+  { id:'deception',      label:'Deception Shield', icon:'🧲' },
   { id:'forensics',      label:'Forensics',        icon:'🔎' },
   { id:'risk',           label:'Risk & Analysis',  icon:'📊' },
   { id:'recommendations',label:'Recommendations',  icon:'💡' },
@@ -440,6 +824,8 @@ const NAV = [
   { id:'intel',          label:'Intel Feed',       icon:'📡' },
   { id:'compliance',     label:'Compliance',       icon:'🛡️' },
   { id:'training',       label:'Training',         icon:'🎮' },
+  { id:'cert-roadmap',   label:'Cert. Roadmap',    icon:'🏆' },
+  { id:'client-report',  label:'Client Report',    icon:'📄' },
   { id:'settings',       label:'Settings',         icon:'⚙️' },
 ];
 
@@ -456,6 +842,12 @@ export default function App() {
   const [trainingXP, setTrainingXP]   = useState(1250);
   const [voiceActive, setVoiceActive] = useState(false);
   const [dbUpdating, setDbUpdating]   = useState(false);
+  const [certFw, setCertFw]           = useState('soc2');
+  const [clientName, setClientName]   = useState('');
+  const [clientOrg, setClientOrg]     = useState('');
+  const [engType, setEngType]         = useState('Penetration Test');
+  const [reportDate, setReportDate]   = useState('2026-05-16');
+  const [scope, setScope]             = useState('');
   const tick = usePulse(800);
 
   const totalThreats   = threats.filter(t => !t.squashed).length;
@@ -1208,6 +1600,9 @@ export default function App() {
         </div>
       );
 
+      // ── DECEPTION SHIELD ──────────────────────────────────────────────────
+      case 'deception': return <DeceptionShield showToast={showToast} tick={tick} />;
+
       // ── FORENSICS ─────────────────────────────────────────────────────────
       case 'forensics': return (
         <div style={{ animation:'fade-in 0.3s ease' }}>
@@ -1801,6 +2196,382 @@ export default function App() {
           </div>
         </div>
       );
+
+      // ── CERTIFICATION ROADMAP ──────────────────────────────────────────────
+      case 'cert-roadmap': {
+        const fw = CERT_FRAMEWORKS.find(f => f.id === certFw) || CERT_FRAMEWORKS[0];
+        const allControls = fw.domains.flatMap(d => d.controls.map((c,i) => ({ domain:d.name, control:c, status:d.status[i] })));
+        const gaps     = allControls.filter(c => c.status === 'gap');
+        const partials = allControls.filter(c => c.status === 'partial');
+        const passed   = allControls.filter(c => c.status === 'pass');
+        return (
+          <div style={{ animation:'fade-in 0.3s ease' }}>
+            <h2 style={{ fontSize:20, fontWeight:900, color:D.white, marginBottom:4 }}>🏆 Certification Roadmap</h2>
+            <p style={{ fontSize:12, color:D.muted, marginBottom:20 }}>Map your client's security posture to framework controls · Identify gaps · Build the path to certification</p>
+
+            {/* Framework selector */}
+            <div style={{ display:'flex', gap:10, flexWrap:'wrap', marginBottom:24 }}>
+              {CERT_FRAMEWORKS.map(f => (
+                <button key={f.id} onClick={() => setCertFw(f.id)} style={{
+                  padding:'10px 18px', borderRadius:10, border:`1px solid ${certFw===f.id ? f.color : D.border}`,
+                  background: certFw===f.id ? `${f.color}22` : 'transparent',
+                  color: certFw===f.id ? f.color : D.muted, fontWeight: certFw===f.id ? 800 : 500,
+                  cursor:'pointer', fontSize:12, transition:'all 0.2s',
+                }}>
+                  {f.icon} {f.name}
+                </button>
+              ))}
+            </div>
+
+            {/* Stats */}
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:14, marginBottom:20 }}>
+              <GlowCard color={fw.color} style={{ padding:'18px 20px' }}>
+                <div style={{ fontSize:10, color:D.muted, textTransform:'uppercase', letterSpacing:1.5, marginBottom:8 }}>Readiness Score</div>
+                <div style={{ fontSize:34, fontWeight:900, color:fw.color, fontFamily:'monospace', lineHeight:1 }}>{fw.readiness}%</div>
+                <div style={{ marginTop:10, height:4, background:D.border, borderRadius:2 }}>
+                  <div style={{ height:'100%', width:`${fw.readiness}%`, background:`linear-gradient(90deg,${fw.color}88,${fw.color})`, borderRadius:2, boxShadow:`0 0 8px ${fw.color}` }} />
+                </div>
+                <div style={{ fontSize:10, color:D.muted, marginTop:6 }}>Issuer: {fw.issuer}</div>
+              </GlowCard>
+              <GlowCard color={D.green} style={{ padding:'18px 20px' }}>
+                <div style={{ fontSize:10, color:D.muted, textTransform:'uppercase', letterSpacing:1.5, marginBottom:8 }}>Controls Passed</div>
+                <div style={{ fontSize:34, fontWeight:900, color:D.green, fontFamily:'monospace' }}>{passed.length}</div>
+                <div style={{ fontSize:10, color:D.muted, marginTop:4 }}>of {allControls.length} total</div>
+              </GlowCard>
+              <GlowCard color={D.orange} style={{ padding:'18px 20px' }}>
+                <div style={{ fontSize:10, color:D.muted, textTransform:'uppercase', letterSpacing:1.5, marginBottom:8 }}>Partial Controls</div>
+                <div style={{ fontSize:34, fontWeight:900, color:D.orange, fontFamily:'monospace' }}>{partials.length}</div>
+                <div style={{ fontSize:10, color:D.muted, marginTop:4 }}>need improvement</div>
+              </GlowCard>
+              <GlowCard color={D.red} style={{ padding:'18px 20px' }}>
+                <div style={{ fontSize:10, color:D.muted, textTransform:'uppercase', letterSpacing:1.5, marginBottom:8 }}>Critical Gaps</div>
+                <div style={{ fontSize:34, fontWeight:900, color:D.red, fontFamily:'monospace' }}>{gaps.length}</div>
+                <div style={{ fontSize:10, color:D.muted, marginTop:4 }}>immediate action</div>
+              </GlowCard>
+            </div>
+
+            <div style={{ display:'grid', gridTemplateColumns:'1.5fr 1fr', gap:18 }}>
+              {/* Control mapping */}
+              <GlowCard color={fw.color} style={{ padding:24 }}>
+                <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:16 }}>📋 Control Mapping — {fw.name}</div>
+                <div style={{ maxHeight:500, overflowY:'auto' }}>
+                  {fw.domains.map(domain => (
+                    <div key={domain.name} style={{ marginBottom:18 }}>
+                      <div style={{ fontSize:10, fontWeight:800, color:fw.color, marginBottom:8, textTransform:'uppercase', letterSpacing:1 }}>{domain.name}</div>
+                      {domain.controls.map((control, i) => {
+                        const st = domain.status[i];
+                        const stColor = st==='pass' ? D.green : st==='partial' ? D.orange : D.red;
+                        const stLabel = st==='pass' ? '✓ PASS' : st==='partial' ? '⚠ PARTIAL' : '✗ GAP';
+                        return (
+                          <div key={control} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'7px 12px', background:'#081420', borderRadius:6, marginBottom:4, border:`1px solid ${stColor}22` }}>
+                            <div style={{ fontSize:11, color:D.text }}>{control}</div>
+                            <span style={{ fontSize:9, fontWeight:800, color:stColor, whiteSpace:'nowrap', marginLeft:10 }}>{stLabel}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+              </GlowCard>
+
+              {/* Priority actions */}
+              <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+                <GlowCard color={D.red} style={{ padding:22 }}>
+                  <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>🚨 Priority Actions</div>
+                  {gaps.length === 0 && <div style={{ fontSize:11, color:D.green }}>No critical gaps — on track!</div>}
+                  {gaps.map(g => (
+                    <div key={g.control} style={{ padding:'9px 12px', background:'rgba(255,45,85,0.08)', border:`1px solid ${D.red}33`, borderRadius:8, marginBottom:8 }}>
+                      <div style={{ fontSize:9, fontWeight:800, color:D.red, marginBottom:3, textTransform:'uppercase', letterSpacing:1 }}>Critical Gap</div>
+                      <div style={{ fontSize:11, color:D.text, fontWeight:600 }}>{g.control}</div>
+                      <div style={{ fontSize:9, color:D.muted, marginTop:2 }}>{g.domain}</div>
+                    </div>
+                  ))}
+                  {partials.map(g => (
+                    <div key={g.control} style={{ padding:'9px 12px', background:'rgba(255,107,53,0.08)', border:`1px solid ${D.orange}33`, borderRadius:8, marginBottom:8 }}>
+                      <div style={{ fontSize:9, fontWeight:800, color:D.orange, marginBottom:3, textTransform:'uppercase', letterSpacing:1 }}>Needs Improvement</div>
+                      <div style={{ fontSize:11, color:D.text, fontWeight:600 }}>{g.control}</div>
+                      <div style={{ fontSize:9, color:D.muted, marginTop:2 }}>{g.domain}</div>
+                    </div>
+                  ))}
+                </GlowCard>
+
+                <GlowCard color={D.cyan} style={{ padding:22 }}>
+                  <div style={{ fontSize:12, fontWeight:800, color:D.white, marginBottom:14 }}>📅 Estimated Timeline to Cert.</div>
+                  {[
+                    ['Address critical gaps','1–2 weeks'],
+                    ['Remediate partial controls','3–4 weeks'],
+                    ['Evidence pack & internal audit','2 weeks'],
+                    ['External auditor engagement','4–6 weeks'],
+                    ['Certification awarded','~3 months total'],
+                  ].map(([step, time]) => (
+                    <div key={step} style={{ display:'flex', justifyContent:'space-between', marginBottom:8, padding:'7px 10px', background:'#081420', borderRadius:6 }}>
+                      <span style={{ fontSize:10, color:D.text }}>{step}</span>
+                      <span style={{ fontSize:10, color:D.cyan, fontFamily:'monospace', fontWeight:700 }}>{time}</span>
+                    </div>
+                  ))}
+                </GlowCard>
+
+                <button onClick={() => showToast(`📄 Gap report for ${fw.name} exported.`, fw.color)} style={{ padding:'13px', borderRadius:10, border:'none', background:`linear-gradient(135deg,${fw.color},${D.blue})`, color:'#fff', fontWeight:800, fontSize:13, cursor:'pointer' }}>
+                  📄 Export Gap Report
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // ── CLIENT REPORT EXPORT ───────────────────────────────────────────────
+      case 'client-report': {
+        const critT   = threats.filter(t => !t.squashed && t.severity==='critical');
+        const highT   = threats.filter(t => !t.squashed && t.severity==='high');
+        const medT    = threats.filter(t => !t.squashed && t.severity==='medium');
+        const squashedT = threats.filter(t => t.squashed);
+        const activeT = threats.filter(t => !t.squashed);
+
+        const exportReport = () => {
+          const rows = activeT.map(t => `
+            <tr>
+              <td style="font-family:monospace;font-size:11px;color:#555">${t.id}</td>
+              <td style="font-weight:600">${t.name}</td>
+              <td style="font-size:11px;color:#666">${t.type}</td>
+              <td><span style="padding:2px 8px;border-radius:4px;font-size:9px;font-weight:800;text-transform:uppercase;background:${t.severity==='critical'?'#FFE5EA':t.severity==='high'?'#FFF0E8':'#FFFAE0'};color:${t.severity==='critical'?'#CC002B':t.severity==='high'?'#CC4400':'#997700'}">${t.severity}</span></td>
+              <td style="font-size:11px;color:#555">${t.location}</td>
+              <td style="font-family:monospace;font-size:10px;color:#888">${t.cve}</td>
+              <td style="font-size:11px;color:#777;text-transform:capitalize">${t.status}</td>
+            </tr>`).join('');
+
+          const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+<title>Security Report — ${clientOrg||'Client'}</title>
+<style>
+  body{font-family:Arial,sans-serif;background:#fff;color:#111;padding:48px;max-width:900px;margin:0 auto}
+  h1{color:#0A1828;font-size:26px;margin-bottom:4px}
+  h2{color:#1A3A5F;font-size:15px;border-bottom:2px solid #1A7AFF;padding-bottom:6px;margin:28px 0 12px}
+  .hdr{display:flex;justify-content:space-between;border-bottom:3px solid #1A7AFF;padding-bottom:20px;margin-bottom:24px}
+  .logo{font-size:20px;font-weight:900;color:#1A7AFF}
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:16px 0}
+  .stat-box{border:1px solid #ddd;border-radius:8px;padding:14px;text-align:center}
+  .stat-num{font-size:28px;font-weight:900;margin-bottom:4px}
+  table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:14px}
+  th{background:#1A3A5F;color:#fff;padding:8px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1px}
+  td{padding:8px 12px;border-bottom:1px solid #eee}
+  tr:nth-child(even) td{background:#f9f9f9}
+  .sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:48px}
+  .sig-line{border-top:1px solid #333;padding-top:4px;font-size:10px;color:#666}
+  ol li{margin-bottom:8px;font-size:13px;line-height:1.6;color:#333}
+  @media print{body{padding:20px}}
+</style></head><body>
+<div class="hdr">
+  <div><div class="logo">🦁 LeoNet Defense</div><div style="font-size:10px;color:#888;margin-top:3px">AI-Powered Quantum Cybersecurity Platform</div></div>
+  <div style="text-align:right">
+    <div style="font-size:10px;color:#888;font-weight:700;letter-spacing:1px">CONFIDENTIAL</div>
+    <div style="font-size:13px;font-weight:700;color:#1A3A5F">${clientOrg||'Client Organization'}</div>
+    <div style="font-size:11px;color:#666">${engType} · ${reportDate}</div>
+  </div>
+</div>
+<h1>${engType} Report</h1>
+<div style="font-size:13px;color:#555;margin-bottom:20px">Prepared for: <strong>${clientOrg||'Client Organization'}</strong> &nbsp;|&nbsp; Lead Assessor: <strong>${clientName||'—'}</strong> &nbsp;|&nbsp; CompTIA Security+ · PenTest+</div>
+
+<h2>1. Executive Summary</h2>
+<p style="font-size:13px;color:#333;line-height:1.7">
+LeoNet Defense conducted a ${engType.toLowerCase()} engagement for <strong>${clientOrg||'the client organization'}</strong> on ${reportDate}.${scope ? ` Scope: ${scope}.` : ''}
+The assessment identified <strong>${critT.length} critical</strong> and <strong>${highT.length} high</strong> severity findings requiring immediate attention. ${squashedT.length} threats were neutralized during the engagement.
+The organization's current security posture presents elevated risk and prioritized remediation is required before certification readiness can be achieved.
+</p>
+<div class="stat-grid">
+  <div class="stat-box"><div class="stat-num" style="color:#CC002B">${critT.length}</div><div style="font-size:11px;color:#666">Critical</div></div>
+  <div class="stat-box"><div class="stat-num" style="color:#CC4400">${highT.length}</div><div style="font-size:11px;color:#666">High</div></div>
+  <div class="stat-box"><div class="stat-num" style="color:#997700">${medT.length}</div><div style="font-size:11px;color:#666">Medium</div></div>
+  <div class="stat-box"><div class="stat-num" style="color:#006622">${squashedT.length}</div><div style="font-size:11px;color:#666">Neutralized</div></div>
+</div>
+
+<h2>2. Findings Detail</h2>
+<table><thead><tr><th>ID</th><th>Threat Name</th><th>Type</th><th>Severity</th><th>Location</th><th>CVE</th><th>Status</th></tr></thead>
+<tbody>${rows}</tbody></table>
+
+<h2>3. Risk Score</h2>
+<div style="display:flex;align-items:center;gap:20px;padding:16px;border:1px solid #ddd;border-radius:8px;margin-bottom:12px">
+  <div style="font-size:44px;font-weight:900;color:#CC002B">74<span style="font-size:20px">/100</span></div>
+  <div>
+    <div style="font-size:13px;font-weight:700;color:#CC002B">HIGH RISK</div>
+    <div style="font-size:12px;color:#555;margin-top:4px;line-height:1.6">Composite risk score of 74/100 indicates significant exposure.<br/>Immediate remediation of critical findings required to reduce below acceptable threshold (&lt;40).</div>
+  </div>
+</div>
+
+<h2>4. Compliance Posture</h2>
+<table><thead><tr><th>Framework</th><th>Readiness</th><th>Status</th><th>Key Gaps</th></tr></thead>
+<tbody>
+  <tr><td>SOC 2 Type II</td><td>81%</td><td><span style="background:#FFF0E8;color:#CC4400;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">IN PROGRESS</span></td><td>Logical Access Controls, Data Disposal</td></tr>
+  <tr><td>ISO 27001:2022</td><td>88%</td><td><span style="background:#E0FFE8;color:#006622;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">NEAR READY</span></td><td>Secure Office &amp; Screen Policy</td></tr>
+  <tr><td>HIPAA Security Rule</td><td>85%</td><td><span style="background:#FFF0E8;color:#CC4400;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">IN PROGRESS</span></td><td>Device Controls, 60-Day Notification SLA</td></tr>
+  <tr><td>GDPR</td><td>78%</td><td><span style="background:#FFF0E8;color:#CC4400;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">IN PROGRESS</span></td><td>DPO Appointment, Privacy by Design</td></tr>
+  <tr><td>CMMC Level 2</td><td>77%</td><td><span style="background:#FFE5EA;color:#CC002B;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">GAPS EXIST</span></td><td>Incident Response Plan Testing</td></tr>
+  <tr><td>PCI DSS v4.0</td><td>80%</td><td><span style="background:#FFF0E8;color:#CC4400;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">IN PROGRESS</span></td><td>Physical CDE Security, Key Management</td></tr>
+</tbody></table>
+
+<h2>5. Recommendations</h2>
+<ol>
+  <li>Apply critical patches immediately: CVE-2026-0089 (Chrome), CVE-2026-0041 (Windows Kernel)</li>
+  <li>Enforce MFA on all privileged accounts and remote access systems within 7 days</li>
+  <li>Disable legacy protocols: SMBv1, Telnet, FTP across all systems</li>
+  <li>Deploy endpoint detection and response (EDR) on all endpoints within 30 days</li>
+  <li>Implement SIEM with 90-day log retention to satisfy SOC 2 / ISO 27001 requirements</li>
+  <li>Appoint a Data Protection Officer (DPO) to address GDPR Art. 37 requirement</li>
+  <li>Document and test Incident Response Plan quarterly to satisfy CMMC Level 2 IR domain</li>
+  <li>Conduct quarterly penetration tests and semi-annual vulnerability assessments</li>
+</ol>
+
+<h2>6. Methodology</h2>
+<p style="font-size:13px;color:#333;line-height:1.7">
+This engagement was conducted in accordance with: <strong>PTES (Penetration Testing Execution Standard)</strong>, <strong>OWASP Testing Guide</strong>, <strong>NIST SP 800-115</strong>, and the <strong>MITRE ATT&amp;CK framework</strong>. All testing was performed with explicit written authorization within the defined scope. This report constitutes a confidential deliverable and may be used as audit evidence for the frameworks listed above.
+</p>
+
+<div class="sig-grid">
+  <div>
+    <div class="sig-line">Lead Assessor Signature</div>
+    <div style="margin-top:8px;font-size:12px;font-weight:700">${clientName||'Lead Assessor'}</div>
+    <div style="font-size:11px;color:#666">CompTIA Security+ &nbsp;|&nbsp; PenTest+</div>
+    <div style="font-size:11px;color:#666">LeoNet Defense · ${reportDate}</div>
+  </div>
+  <div>
+    <div class="sig-line">Client Authorized Representative</div>
+    <div style="margin-top:8px;font-size:12px;color:#bbb">________________________</div>
+    <div style="font-size:11px;color:#888">Title: ___________________</div>
+    <div style="font-size:11px;color:#888">Date: ____________________</div>
+  </div>
+</div>
+
+<div style="margin-top:40px;padding-top:12px;border-top:1px solid #ddd;font-size:10px;color:#aaa;text-align:center">
+CONFIDENTIAL — This document contains sensitive security information. Distribute only to authorized personnel. &nbsp;|&nbsp; LeoNet Defense &nbsp;|&nbsp; Generated: ${new Date().toLocaleString()}
+</div>
+</body></html>`;
+          const w = window.open('', '_blank');
+          w.document.write(html);
+          w.document.close();
+          setTimeout(() => w.print(), 600);
+        };
+
+        return (
+          <div style={{ animation:'fade-in 0.3s ease' }}>
+            <h2 style={{ fontSize:20, fontWeight:900, color:D.white, marginBottom:4 }}>📄 Client Report Export</h2>
+            <p style={{ fontSize:12, color:D.muted, marginBottom:24 }}>Generate a professional PDF security report for client delivery · CompTIA-aligned methodology · Court-admissible documentation</p>
+
+            <div style={{ display:'grid', gridTemplateColumns:'360px 1fr', gap:20, alignItems:'start' }}>
+              {/* Form */}
+              <GlowCard color={D.blue} style={{ padding:26 }}>
+                <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:20 }}>🖊 Engagement Details</div>
+
+                {[
+                  { label:'Your Name / Assessor', ph:'e.g. Eric Musa, Security+, PenTest+', val:clientName, set:setClientName },
+                  { label:'Client Organization', ph:'e.g. National Port Authority', val:clientOrg, set:setClientOrg },
+                ].map(f => (
+                  <div key={f.label} style={{ marginBottom:16 }}>
+                    <div style={{ fontSize:10, color:D.muted, fontWeight:700, marginBottom:6, textTransform:'uppercase', letterSpacing:1 }}>{f.label}</div>
+                    <input value={f.val} onChange={e => f.set(e.target.value)} placeholder={f.ph}
+                      style={{ width:'100%', padding:'10px 14px', background:'#081420', border:`1px solid ${D.border}`, borderRadius:8, color:D.white, fontSize:12, outline:'none', boxSizing:'border-box' }} />
+                  </div>
+                ))}
+
+                <div style={{ marginBottom:16 }}>
+                  <div style={{ fontSize:10, color:D.muted, fontWeight:700, marginBottom:6, textTransform:'uppercase', letterSpacing:1 }}>Engagement Type</div>
+                  <select value={engType} onChange={e => setEngType(e.target.value)}
+                    style={{ width:'100%', padding:'10px 14px', background:'#081420', border:`1px solid ${D.border}`, borderRadius:8, color:D.white, fontSize:12, outline:'none' }}>
+                    {['Penetration Test','Vulnerability Assessment','Compliance Audit','Security Assessment','Red Team Exercise','Incident Response','Forensic Investigation'].map(t=>(
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div style={{ marginBottom:16 }}>
+                  <div style={{ fontSize:10, color:D.muted, fontWeight:700, marginBottom:6, textTransform:'uppercase', letterSpacing:1 }}>Report Date</div>
+                  <input type="date" value={reportDate} onChange={e => setReportDate(e.target.value)}
+                    style={{ width:'100%', padding:'10px 14px', background:'#081420', border:`1px solid ${D.border}`, borderRadius:8, color:D.white, fontSize:12, outline:'none' }} />
+                </div>
+
+                <div style={{ marginBottom:24 }}>
+                  <div style={{ fontSize:10, color:D.muted, fontWeight:700, marginBottom:6, textTransform:'uppercase', letterSpacing:1 }}>Scope of Engagement</div>
+                  <textarea value={scope} onChange={e => setScope(e.target.value)} rows={3}
+                    placeholder="e.g. External network, web applications, internal AD environment..."
+                    style={{ width:'100%', padding:'10px 14px', background:'#081420', border:`1px solid ${D.border}`, borderRadius:8, color:D.white, fontSize:12, outline:'none', resize:'vertical', fontFamily:'inherit', boxSizing:'border-box' }} />
+                </div>
+
+                <button onClick={exportReport}
+                  style={{ width:'100%', padding:'14px', borderRadius:10, border:'none', background:`linear-gradient(135deg,${D.blue},${D.cyan})`, color:'#fff', fontWeight:800, fontSize:14, cursor:'pointer', letterSpacing:0.5 }}>
+                  📄 Export &amp; Print PDF
+                </button>
+                <div style={{ marginTop:10, fontSize:10, color:D.muted, textAlign:'center', lineHeight:1.5 }}>
+                  Opens a clean page → browser Print → Save as PDF<br/>Delivers a professional client-ready report
+                </div>
+              </GlowCard>
+
+              {/* Live Preview */}
+              <GlowCard color={D.gold} style={{ padding:24 }}>
+                <div style={{ fontSize:13, fontWeight:800, color:D.white, marginBottom:20 }}>👁 Report Preview</div>
+
+                <div style={{ background:'#fff', borderRadius:12, padding:28, color:'#111', fontFamily:'Arial,sans-serif' }}>
+                  {/* Report header */}
+                  <div style={{ display:'flex', justifyContent:'space-between', borderBottom:'3px solid #1A7AFF', paddingBottom:16, marginBottom:20 }}>
+                    <div>
+                      <div style={{ fontSize:16, fontWeight:900, color:'#1A7AFF' }}>🦁 LeoNet Defense</div>
+                      <div style={{ fontSize:10, color:'#888', marginTop:2 }}>AI-Powered Quantum Cybersecurity Platform</div>
+                    </div>
+                    <div style={{ textAlign:'right' }}>
+                      <div style={{ fontSize:10, color:'#888', fontWeight:700, letterSpacing:1 }}>CONFIDENTIAL</div>
+                      <div style={{ fontSize:12, fontWeight:700, color:'#1A3A5F' }}>{clientOrg||'Client Organization'}</div>
+                      <div style={{ fontSize:10, color:'#888' }}>{engType} · {reportDate}</div>
+                    </div>
+                  </div>
+
+                  <div style={{ fontSize:16, fontWeight:900, color:'#0A1828', marginBottom:4 }}>{engType} Report</div>
+                  <div style={{ fontSize:11, color:'#555', marginBottom:16 }}>For: <strong>{clientOrg||'Client Organization'}</strong> &nbsp;|&nbsp; Assessor: <strong>{clientName||'—'}</strong></div>
+
+                  {/* Stats */}
+                  <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:8, marginBottom:16 }}>
+                    {[[critT.length,'Critical','#CC002B'],[highT.length,'High','#CC4400'],[medT.length,'Medium','#997700'],[squashedT.length,'Neutralized','#006622']].map(([n,l,c])=>(
+                      <div key={l} style={{ border:'1px solid #ddd', borderRadius:6, padding:'10px', textAlign:'center' }}>
+                        <div style={{ fontSize:22, fontWeight:900, color:c }}>{n}</div>
+                        <div style={{ fontSize:10, color:'#666' }}>{l}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Top findings */}
+                  <div style={{ fontSize:11, fontWeight:800, color:'#1A3A5F', borderBottom:'2px solid #1A7AFF', paddingBottom:4, marginBottom:10 }}>FINDINGS SUMMARY</div>
+                  {activeT.slice(0,4).map(t=>(
+                    <div key={t.id} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'7px 0', borderBottom:'1px solid #f0f0f0' }}>
+                      <div>
+                        <div style={{ fontSize:11, fontWeight:700 }}>{t.name}</div>
+                        <div style={{ fontSize:10, color:'#888' }}>{t.type} · {t.cve}</div>
+                      </div>
+                      <span style={{ fontSize:9, fontWeight:800, padding:'2px 8px', borderRadius:4,
+                        background: t.severity==='critical'?'#FFE5EA':t.severity==='high'?'#FFF0E8':'#FFFAE0',
+                        color: t.severity==='critical'?'#CC002B':t.severity==='high'?'#CC4400':'#997700',
+                        textTransform:'uppercase' }}>{t.severity}</span>
+                    </div>
+                  ))}
+                  {activeT.length > 4 && <div style={{ fontSize:10, color:'#999', marginTop:6, fontStyle:'italic' }}>+ {activeT.length - 4} more findings in full export...</div>}
+
+                  {/* Signature */}
+                  <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20, marginTop:20 }}>
+                    <div>
+                      <div style={{ borderTop:'1px solid #333', paddingTop:4, fontSize:10, color:'#666' }}>Lead Assessor Signature</div>
+                      <div style={{ marginTop:6, fontSize:11, fontWeight:700 }}>{clientName||'Lead Assessor'}</div>
+                      <div style={{ fontSize:10, color:'#888' }}>Security+ | PenTest+</div>
+                    </div>
+                    <div>
+                      <div style={{ borderTop:'1px solid #333', paddingTop:4, fontSize:10, color:'#666' }}>Client Representative</div>
+                      <div style={{ marginTop:6, fontSize:11, color:'#ccc' }}>________________________</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ marginTop:14, fontSize:11, color:D.muted, textAlign:'center' }}>
+                  Fill the form → click Export to generate the full report with all {activeT.length} findings, compliance posture &amp; recommendations
+                </div>
+              </GlowCard>
+            </div>
+          </div>
+        );
+      }
 
       default: return (
         <div style={{ textAlign:'center', padding:80, color:D.muted }}>
